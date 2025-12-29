@@ -1,43 +1,27 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FiArrowLeft, FiUser, FiMail, FiPhone, FiMapPin, FiSave, FiX } from 'react-icons/fi'
+import { FiArrowLeft, FiSave, FiX } from 'react-icons/fi'
 import api from '../services/api'
 import './AddClient.css'
 
 function AddClient() {
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
-    firstName: '',
     lastName: '',
-    email: '',
-    phone: '',
-    address: {
-      street: '',
-      city: '',
-      postalCode: '',
-      country: ''
-    }
+    bankName: '',
+    accountNumber: '',
+    swiftCode: '',
+    bankAddress: ''
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    if (name.startsWith('address.')) {
-      const addressField = name.split('.')[1]
-      setFormData({
-        ...formData,
-        address: {
-          ...formData.address,
-          [addressField]: value
-        }
-      })
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value
-      })
-    }
+    setFormData({
+      ...formData,
+      [name]: value
+    })
   }
 
   const handleSubmit = async (e) => {
@@ -46,7 +30,14 @@ function AddClient() {
     setLoading(true)
 
     try {
-      const response = await api.post('/clients', formData)
+      // Convertir le code SWIFT en majuscules et s'assurer que firstName est vide si non fourni
+      const payload = {
+        ...formData,
+        firstName: '', // Explicitement vide car non requis
+        swiftCode: formData.swiftCode.toUpperCase().trim()
+      }
+      
+      const response = await api.post('/clients', payload)
       if (response.data.success) {
         navigate('/clients')
       }
@@ -79,135 +70,81 @@ function AddClient() {
       )}
 
       <form onSubmit={handleSubmit} className="add-client-form">
-        {/* Informations personnelles */}
+        {/* Informations */}
         <div className="form-section">
-          <div className="section-header">
-            <div className="section-icon">
-              <FiUser size={24} />
-            </div>
-            <h2>Informations personnelles</h2>
-          </div>
-          
-          <div className="form-grid">
-            <div className="form-group">
-              <label htmlFor="firstName">
-                Prénom <span className="required">*</span>
-              </label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                placeholder="Entrez le prénom"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="lastName">
-                Nom <span className="required">*</span>
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                placeholder="Entrez le nom"
-                required
-              />
-            </div>
-          </div>
-
           <div className="form-group">
-            <label htmlFor="email">
-              <FiMail size={16} />
-              Email <span className="required">*</span>
+            <label htmlFor="lastName">
+              Nom <span className="required">*</span>
             </label>
             <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
+              type="text"
+              id="lastName"
+              name="lastName"
+              value={formData.lastName}
               onChange={handleChange}
-              placeholder="exemple@email.com"
+              placeholder="Entrez le nom"
               required
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="phone">
-              <FiPhone size={16} />
-              Téléphone
+            <label htmlFor="bankName">
+              Nom de la banque <span className="required">*</span>
             </label>
             <input
-              type="tel"
-              id="phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              placeholder="+41 XX XXX XX XX"
-            />
-          </div>
-        </div>
-
-        {/* Adresse */}
-        <div className="form-section">
-          <div className="section-header">
-            <div className="section-icon">
-              <FiMapPin size={24} />
-            </div>
-            <h2>Adresse</h2>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="street">Rue</label>
-            <input
               type="text"
-              id="street"
-              name="address.street"
-              value={formData.address.street}
+              id="bankName"
+              name="bankName"
+              value={formData.bankName}
               onChange={handleChange}
-              placeholder="Nom de la rue et numéro"
+              placeholder="Ex: UBS, Credit Suisse, etc."
+              required
             />
           </div>
 
-          <div className="form-grid">
-            <div className="form-group">
-              <label htmlFor="city">Ville</label>
-              <input
-                type="text"
-                id="city"
-                name="address.city"
-                value={formData.address.city}
-                onChange={handleChange}
-                placeholder="Ville"
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="postalCode">Code postal</label>
-              <input
-                type="text"
-                id="postalCode"
-                name="address.postalCode"
-                value={formData.address.postalCode}
-                onChange={handleChange}
-                placeholder="XXXX"
-              />
-            </div>
+          <div className="form-group">
+            <label htmlFor="accountNumber">
+              Numéro de compte <span className="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="accountNumber"
+              name="accountNumber"
+              value={formData.accountNumber}
+              onChange={handleChange}
+              placeholder="Numéro de compte bancaire"
+              required
+            />
           </div>
 
           <div className="form-group">
-            <label htmlFor="country">Pays</label>
+            <label htmlFor="swiftCode">
+              Code SWIFT <span className="required">*</span>
+            </label>
             <input
               type="text"
-              id="country"
-              name="address.country"
-              value={formData.address.country}
+              id="swiftCode"
+              name="swiftCode"
+              value={formData.swiftCode}
               onChange={handleChange}
-              placeholder="Pays"
+              placeholder="Ex: UBSWCHZH80A"
+              required
+              style={{ textTransform: 'uppercase' }}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="bankAddress">
+              Adresse de la banque <span className="required">*</span>
+            </label>
+            <textarea
+              id="bankAddress"
+              name="bankAddress"
+              value={formData.bankAddress}
+              onChange={handleChange}
+              rows="3"
+              placeholder="Adresse complète de la banque"
+              required
             />
           </div>
         </div>

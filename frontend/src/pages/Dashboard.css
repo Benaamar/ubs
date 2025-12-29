@@ -258,6 +258,93 @@
   margin-bottom: 16px;
 }
 
+/* Operations List (for card display) */
+.operations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.operation-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.operation-card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.operation-card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.operation-card-header {
+  margin-bottom: 12px;
+}
+
+.operation-card-bank {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.operation-card-bank-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.operation-card-bank-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--color-text);
+}
+
+.operation-card-account {
+  font-size: 13px;
+  color: #777;
+  letter-spacing: 0.5px;
+}
+
+.operation-card-amount {
+  margin-top: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: right;
+}
+
+.operation-card-amount.amount-positive {
+  color: #1a9b5e;
+}
+
+.operation-card-amount.amount-negative {
+  color: #d64545;
+}
+
+@media (max-width: 768px) {
+  .operations-list {
+    gap: 10px;
+  }
+
+  .operation-card {
+    padding: 14px;
+  }
+
+  .operation-card-amount {
+    font-size: 16px;
+  }
+
+  .operation-card-bank-name {
+    font-size: 0.9375rem;
+  }
+}
+
 .transactions-title {
   font-size: 18px;
   font-weight: 700;

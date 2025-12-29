@@ -11,6 +11,15 @@ export default defineConfig({
       '.ngrok.app'
     ]
     // Proxy désactivé - on utilise directement l'URL ngrok dans api.js
-  }
+  },
+  build: {
+    // Optimisation pour PWA
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
+      }
+    }
+  },
+  publicDir: 'public' // Assure que les fichiers public sont copiés dans dist
 })
 

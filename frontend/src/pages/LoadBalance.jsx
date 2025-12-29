@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FiArrowLeft, FiDollarSign, FiFileText, FiSave, FiX } from 'react-icons/fi'
+import { FiArrowLeft, FiFileText, FiSave, FiX } from 'react-icons/fi'
 import api from '../services/api'
 import './LoadBalance.css'
 
@@ -29,7 +29,7 @@ function LoadBalance() {
     try {
       // Validation
       const amount = parseFloat(formData.amount)
-      if (!amount || amount <= 0 || isNaN(amount)) {
+      if (!amount || amount <= 0) {
         setError('Veuillez entrer un montant valide')
         setLoading(false)
         return
@@ -38,13 +38,12 @@ function LoadBalance() {
       // Créer une opération de type 'deposit' pour le compte admin (sans clientId)
       const payload = {
         type: 'deposit',
-        amount: Number(amount), // S'assurer que c'est un nombre
+        amount: amount,
         description: formData.description || 'Rechargement de solde'
         // Pas de clientId pour les dépôts admin
       }
       
       console.log('Payload envoyé pour chargement de solde:', payload)
-      console.log('Type de amount:', typeof payload.amount)
       
       const response = await api.post('/operations', payload)
 
@@ -53,14 +52,11 @@ function LoadBalance() {
         navigate('/', { state: { message: 'Solde chargé avec succès' } })
       }
     } catch (err) {
-      console.error('Erreur complète:', err)
-      console.error('Erreur response:', err.response)
-      console.error('Erreur data:', err.response?.data)
-      const errorMessage = err.response?.data?.message || 
-        err.response?.data?.error ||
-        err.message ||
+      console.error('Erreur lors du chargement du solde:', err)
+      setError(
+        err.response?.data?.message || 
         'Une erreur est survenue lors du chargement du solde'
-      setError(errorMessage)
+      )
     } finally {
       setLoading(false)
     }
@@ -92,13 +88,12 @@ function LoadBalance() {
       <form onSubmit={handleSubmit} className="load-balance-form">
         <div className="form-section">
           <div className="section-header">
-            <div className="section-icon"><FiDollarSign size={24} /></div>
+            <div className="section-icon" style={{ fontSize: '20px', fontWeight: 'bold' }}>CHF</div>
             <h2>Informations de rechargement</h2>
           </div>
 
           <div className="form-group">
             <label htmlFor="amount">
-              <FiDollarSign size={16} />
               Montant <span className="required">*</span>
             </label>
             <input
@@ -117,7 +112,6 @@ function LoadBalance() {
 
           <div className="form-group">
             <label htmlFor="description">
-              <FiFileText size={16} />
               Description (optionnel)
             </label>
             <textarea

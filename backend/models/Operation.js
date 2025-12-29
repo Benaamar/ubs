@@ -41,25 +41,9 @@ const operationSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Update client balance after operation
-operationSchema.post('save', async function() {
-  // Skip balance update for admin deposits (no clientId)
-  if (!this.clientId) {
-    return;
-  }
-  
-  const Client = mongoose.model('Client');
-  const client = await Client.findById(this.clientId);
-  
-  if (client && this.status === 'completed') {
-    if (this.type === 'deposit') {
-      client.balance += this.amount;
-    } else if (this.type === 'withdrawal' || this.type === 'payment' || this.type === 'transfer') {
-      client.balance -= this.amount;
-    }
-    await client.save();
-  }
-});
+// Note: Client balance is now updated directly in the routes/operations.js file
+// This hook is disabled to avoid double updates and race conditions
+// operationSchema.post('save', async function() { ... });
 
 module.exports = mongoose.model('Operation', operationSchema);
 

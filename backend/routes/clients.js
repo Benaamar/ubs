@@ -62,8 +62,27 @@ router.post('/', async (req, res) => {
   try {
     req.body.userId = req.user.id;
     
-    // Generate unique account number if not provided
-    if (!req.body.accountNumber) {
+    // S'assurer que firstName est défini (vide si non fourni)
+    if (req.body.firstName === undefined || req.body.firstName === null) {
+      req.body.firstName = '';
+    }
+    
+    // Convertir le code SWIFT en majuscules
+    if (req.body.swiftCode) {
+      req.body.swiftCode = req.body.swiftCode.toUpperCase().trim();
+    }
+    
+    // Si un numéro de compte est fourni, vérifier qu'il est unique
+    if (req.body.accountNumber) {
+      const exists = await Client.findOne({ accountNumber: req.body.accountNumber });
+      if (exists) {
+        return res.status(400).json({
+          success: false,
+          message: 'Ce numéro de compte existe déjà'
+        });
+      }
+    } else {
+      // Generate unique account number if not provided
       let accountNumber;
       let isUnique = false;
       let attempts = 0;

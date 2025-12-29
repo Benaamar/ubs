@@ -26,8 +26,17 @@ router.get('/', async (req, res) => {
     }
 
     const operations = await Operation.find(query)
-      .populate('clientId', 'firstName lastName accountNumber')
+      .populate('clientId', 'bankName accountNumber')
       .sort({ createdAt: -1 });
+
+    // Debug: vérifier que les données sont bien populées
+    console.log('Operations with populated client:', operations.map(op => ({
+      id: op._id,
+      type: op.type,
+      hasClient: !!op.clientId,
+      clientBankName: op.clientId?.bankName,
+      clientAccountNumber: op.clientId?.accountNumber
+    })));
 
     res.json({
       success: true,
@@ -50,7 +59,7 @@ router.get('/:id', async (req, res) => {
     const operation = await Operation.findOne({ 
       _id: req.params.id, 
       userId: req.user.id 
-    }).populate('clientId', 'firstName lastName accountNumber');
+    }).populate('clientId', 'bankName accountNumber');
 
     if (!operation) {
       return res.status(404).json({
@@ -106,6 +115,8 @@ router.post('/', async (req, res) => {
           message: 'Bénéficiaire not found'
         });
       }
+      
+      console.log(`Client found: ${client._id}, current balance: ${client.balance}, operation type: ${type}, amount: ${numericAmount}`);
     } else if (type !== 'deposit') {
       // clientId is required for non-deposit operations
       return res.status(400).json({
@@ -132,7 +143,7 @@ router.post('/', async (req, res) => {
         console.log('Operation created successfully:', operation._id);
 
         const populatedOperation = await Operation.findById(operation._id)
-          .populate('clientId', 'firstName lastName accountNumber');
+          .populate('clientId', 'bankName accountNumber');
 
         return res.status(201).json({
           success: true,
@@ -148,16 +159,86 @@ router.post('/', async (req, res) => {
       }
     }
 
+    // Vérifier d'abord que le client n'a pas déjà un solde négatif
+    let balanceBefore = client.balance || 0;
+    if (balanceBefore < 0) {
+      console.error(`ERROR: Client ${client._id} already has negative balance: ${balanceBefore}`);
+      // Corriger le solde à 0 avant de continuer
+      balanceBefore = 0;
+      client.balance = 0;
+      await client.save();
+      console.log(`Client balance corrected to 0`);
+    }
+
     // Calculate balance after operation for client operations
-    let balanceAfter = client.balance;
+    let balanceAfter = balanceBefore;
+    
     if (type === 'deposit') {
-      balanceAfter += numericAmount;
-    } else if (type === 'transfer' && adminAccountId) {
-      // For transfers from admin account, credit the beneficiary (client)
-      balanceAfter += numericAmount;
+      // Deposit to client account - CREDIT
+      balanceAfter = balanceBefore + numericAmount;
+    } else if (type === 'transfer') {
+      // For transfers, always credit the beneficiary (client) - money is being sent TO them - CREDIT
+      balanceAfter = balanceBefore + numericAmount;
+    } else if (type === 'withdrawal' || type === 'payment') {
+      // For withdrawals and payments, debit the client - DEBIT
+      balanceAfter = balanceBefore - numericAmount;
     } else {
-      // For withdrawals and payments, debit the client
-      balanceAfter -= numericAmount;
+      // Unknown type - should not happen
+      return res.status(400).json({
+        success: false,
+        message: `Type d'opération invalide: ${type}`
+      });
+    }
+    
+    // Round to 2 decimal places to avoid floating point issues
+    balanceAfter = Math.round(balanceAfter * 100) / 100;
+
+    console.log(`[BALANCE CALC] Client: ${client._id}, Type: ${type}, Before: ${balanceBefore}, Amount: ${numericAmount}, After: ${balanceAfter}`);
+
+    // PROTÉGER LE SOLDE CLIENT - Validation STRICTE AVANT toute sauvegarde
+    if (balanceAfter < 0) {
+      console.error(`[ERROR] Balance would become negative: ${balanceAfter} (balanceBefore: ${balanceBefore}, type: ${type}, amount: ${numericAmount})`);
+      return res.status(400).json({
+        success: false,
+        message: `Solde insuffisant pour effectuer cette opération. Solde actuel: ${balanceBefore.toFixed(2)} CHF, Montant: ${numericAmount.toFixed(2)} CHF`
+      });
+    }
+
+    // Double vérification avec une marge de sécurité (arrondi)
+    if (Math.round(balanceAfter * 100) < 0) {
+      console.error(`[ERROR] Balance calculation error (after rounding): ${balanceAfter}`);
+      return res.status(400).json({
+        success: false,
+        message: `Erreur de calcul: le solde ne peut pas être négatif`
+      });
+    }
+
+    // Update client balance BEFORE creating operation to avoid hook conflicts
+    console.log(`[SAVE] Updating client balance: ${balanceBefore} -> ${balanceAfter} (operation type: ${type}, amount: ${numericAmount})`);
+    
+    try {
+      // S'assurer que le solde est bien positif avant de sauvegarder
+      if (balanceAfter < 0) {
+        throw new Error(`Balance cannot be negative: ${balanceAfter}`);
+      }
+      
+      client.balance = balanceAfter;
+      await client.save({ validateBeforeSave: true });
+      console.log(`✅ Client balance updated successfully: ${client.balance}`);
+    } catch (saveError) {
+      console.error(`[ERROR] Saving client balance failed:`, saveError.message || saveError);
+      
+      // Si l'erreur est due à un solde négatif (validation Mongoose)
+      if (saveError.message && (saveError.message.includes('less than minimum') || saveError.message.includes('negative'))) {
+        // Ne pas créer l'opération si le solde est négatif
+        return res.status(400).json({
+          success: false,
+          message: `Erreur: Le solde ne peut pas être négatif (${balanceAfter.toFixed(2)} CHF). Opération annulée. Solde actuel: ${balanceBefore.toFixed(2)} CHF`
+        });
+      }
+      
+      // Autre erreur - propager
+      throw saveError;
     }
 
     const operation = await Operation.create({
@@ -171,12 +252,8 @@ router.post('/', async (req, res) => {
       balanceAfter
     });
 
-    // Update client balance
-    client.balance = balanceAfter;
-    await client.save();
-
     const populatedOperation = await Operation.findById(operation._id)
-      .populate('clientId', 'firstName lastName accountNumber');
+      .populate('clientId', 'bankName accountNumber');
 
     res.status(201).json({
       success: true,
@@ -220,7 +297,7 @@ router.put('/:id/status', async (req, res) => {
     await operation.save();
 
     const populatedOperation = await Operation.findById(operation._id)
-      .populate('clientId', 'firstName lastName accountNumber');
+      .populate('clientId', 'bankName accountNumber');
 
     res.json({
       success: true,
@@ -256,6 +333,7 @@ router.get('/history/:clientId', async (req, res) => {
       clientId: req.params.clientId,
       userId: req.user.id 
     })
+      .populate('clientId', 'bankName accountNumber')
       .sort({ createdAt: -1 });
 
     res.json({

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { FiArrowLeft, FiUser, FiRepeat, FiDollarSign, FiFileText, FiSave, FiX, FiLayers } from 'react-icons/fi'
+import { FiArrowLeft, FiUser, FiRepeat, FiDollarSign, FiFileText, FiSave, FiX, FiLayers, FiClock, FiZap, FiAlertCircle } from 'react-icons/fi'
 import api from '../services/api'
 import './AddOperation.css'
 
@@ -16,10 +16,14 @@ function AddOperation() {
     clientId: clientIdParam || '',
     adminAccountId: '',
     amount: '',
-    description: ''
+    description: '',
+    transferType: 'instant' // 'instant' ou 'delayed'
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [showConfirmation, setShowConfirmation] = useState(false)
+
+  const MAX_INSTANT_AMOUNT = 20000 // 20k CHF maximum pour virement instantané
 
   useEffect(() => {
     loadClients()
@@ -82,50 +86,69 @@ function AddOperation() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
+
+    // Validation
+    if (!formData.clientId) {
+      setError('Veuillez sélectionner un bénéficiaire')
+      return
+    }
+
+    if (!formData.adminAccountId) {
+      setError('Veuillez sélectionner le compte de l\'admin')
+      return
+    }
+
+    const amount = parseFloat(formData.amount)
+    if (isNaN(amount) || amount <= 0) {
+      setError('Veuillez saisir un montant valide')
+      return
+    }
+
+    // Validation pour virement instantané
+    if (formData.transferType === 'instant' && amount > MAX_INSTANT_AMOUNT) {
+      setError(`Le montant maximum pour un virement instantané est de ${MAX_INSTANT_AMOUNT.toLocaleString('fr-CH')} CHF. Veuillez choisir un virement en 2/3 jours pour ce montant.`)
+      return
+    }
+
+    // Afficher la confirmation avant d'exécuter
+    setShowConfirmation(true)
+  }
+
+  const handleConfirmTransfer = async () => {
+    setError('')
     setLoading(true)
 
     try {
-      // Validation
-      if (!formData.clientId) {
-        setError('Veuillez sélectionner un bénéficiaire')
-        setLoading(false)
-        return
-      }
-
-      if (!formData.adminAccountId) {
-        setError('Veuillez sélectionner le compte de l\'admin')
-        setLoading(false)
-        return
-      }
-
       const amount = parseFloat(formData.amount)
-      if (isNaN(amount) || amount <= 0) {
-        setError('Veuillez saisir un montant valide')
-        setLoading(false)
-        return
-      }
-
+      
       const payload = {
         clientId: formData.clientId,
         adminAccountId: formData.adminAccountId,
-        type: 'transfer', // Par défaut, c'est un virement depuis le compte admin
+        type: 'transfer',
         amount: amount,
-        description: formData.description || ''
+        description: formData.description || '',
+        transferType: formData.transferType,
+        transferSpeed: formData.transferType === 'instant' ? 'instant' : '2-3 days'
       }
 
-      console.log('Payload envoyé:', payload) // Debug
+      console.log('Payload envoyé:', payload)
 
       const response = await api.post('/operations', payload)
       if (response.data.success) {
         navigate('/operations')
       }
     } catch (error) {
-      console.error('Erreur complète:', error.response?.data || error) // Debug
+      console.error('Erreur complète:', error.response?.data || error)
       const errorMessage = error.response?.data?.message || error.message || 'Erreur lors de la création de l\'opération'
       setError(errorMessage)
+      setShowConfirmation(false)
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleCancelConfirmation = () => {
+    setShowConfirmation(false)
   }
 
   return (
@@ -174,7 +197,7 @@ function AddOperation() {
               <option value="">Sélectionner un bénéficiaire</option>
               {clients.map((client) => (
                 <option key={client._id} value={client._id}>
-                  {client.firstName} {client.lastName}
+                  {client.firstName ? `${client.firstName} ` : ''}{client.lastName}
                 </option>
               ))}
             </select>
@@ -220,6 +243,60 @@ function AddOperation() {
               placeholder="0.00"
               required
             />
+            {formData.amount && parseFloat(formData.amount) > MAX_INSTANT_AMOUNT && formData.transferType === 'instant' && (
+              <div className="warning-message">
+                <FiAlertCircle size={16} />
+                <span>Le montant maximum pour un virement instantané est de {MAX_INSTANT_AMOUNT.toLocaleString('fr-CH')} CHF. Veuillez choisir "Virement en 2/3 jours" pour ce montant.</span>
+              </div>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="transferType">
+              <FiClock size={16} />
+              Type de virement <span className="required">*</span>
+            </label>
+            <div className="transfer-type-options">
+              <label className={`transfer-option ${formData.transferType === 'instant' ? 'selected' : ''}`}>
+                <input
+                  type="radio"
+                  name="transferType"
+                  value="instant"
+                  checked={formData.transferType === 'instant'}
+                  onChange={handleChange}
+                />
+                <div className="transfer-option-content">
+                  <div className="transfer-option-header">
+                    <FiZap size={20} />
+                    <span className="transfer-option-title">Virement instantané</span>
+                  </div>
+                  <div className="transfer-option-details">
+                    <span className="transfer-speed">Traitement immédiat</span>
+                    <span className="transfer-limit">Maximum {MAX_INSTANT_AMOUNT.toLocaleString('fr-CH')} CHF</span>
+                  </div>
+                </div>
+              </label>
+              
+              <label className={`transfer-option ${formData.transferType === 'delayed' ? 'selected' : ''}`}>
+                <input
+                  type="radio"
+                  name="transferType"
+                  value="delayed"
+                  checked={formData.transferType === 'delayed'}
+                  onChange={handleChange}
+                />
+                <div className="transfer-option-content">
+                  <div className="transfer-option-header">
+                    <FiClock size={20} />
+                    <span className="transfer-option-title">Virement en 2/3 jours</span>
+                  </div>
+                  <div className="transfer-option-details">
+                    <span className="transfer-speed">Traitement sous 2-3 jours ouvrables</span>
+                    <span className="transfer-limit">Montant illimité</span>
+                  </div>
+                </div>
+              </label>
+            </div>
           </div>
 
           <div className="form-group">
@@ -244,6 +321,7 @@ function AddOperation() {
             type="button"
             onClick={() => navigate('/operations')}
             className="btn btn-primary"
+            disabled={loading || showConfirmation}
           >
             <FiX size={18} />
             <span>Annuler</span>
@@ -251,13 +329,95 @@ function AddOperation() {
           <button 
             type="submit" 
             className="btn btn-primary" 
-            disabled={loading}
+            disabled={loading || showConfirmation}
           >
             <FiSave size={18} />
-            <span>{loading ? 'Création en cours...' : 'Créer l\'opération'}</span>
+            <span>Continuer</span>
           </button>
         </div>
       </form>
+
+      {/* Modal de confirmation */}
+      {showConfirmation && (
+        <div className="confirmation-modal-overlay" onClick={handleCancelConfirmation}>
+          <div className="confirmation-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="confirmation-header">
+              <FiAlertCircle size={24} className="confirmation-icon" />
+              <h3>Confirmation du virement</h3>
+            </div>
+            
+            <div className="confirmation-content">
+              <div className="confirmation-info">
+                <p className="confirmation-text">
+                  Vous êtes sur le point d'effectuer un virement de :
+                </p>
+                <div className="confirmation-amount">
+                  <span className="amount-value">
+                    {parseFloat(formData.amount).toLocaleString('fr-CH', { 
+                      minimumFractionDigits: 2, 
+                      maximumFractionDigits: 2 
+                    })} CHF
+                  </span>
+                </div>
+                
+                <div className="confirmation-details">
+                  <div className="confirmation-detail-item">
+                    <span className="detail-label">Type de virement :</span>
+                    <span className="detail-value">
+                      {formData.transferType === 'instant' ? (
+                        <>
+                          <FiZap size={16} />
+                          Virement instantané (traitement immédiat)
+                        </>
+                      ) : (
+                        <>
+                          <FiClock size={16} />
+                          Virement en 2/3 jours (traitement sous 2-3 jours ouvrables)
+                        </>
+                      )}
+                    </span>
+                  </div>
+                  
+                  {formData.transferType === 'instant' && (
+                    <div className="confirmation-note">
+                      <FiAlertCircle size={16} />
+                      <span>Le montant maximum pour un virement instantané est de {MAX_INSTANT_AMOUNT.toLocaleString('fr-CH')} CHF.</span>
+                    </div>
+                  )}
+                  
+                  {formData.transferType === 'delayed' && (
+                    <div className="confirmation-note">
+                      <FiClock size={16} />
+                      <span>Ce virement sera traité sous 2-3 jours ouvrables. Montant illimité.</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="confirmation-actions">
+              <button
+                type="button"
+                onClick={handleCancelConfirmation}
+                className="btn btn-secondary"
+                disabled={loading}
+              >
+                <FiX size={18} />
+                <span>Annuler</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmTransfer}
+                className="btn btn-primary"
+                disabled={loading}
+              >
+                <FiSave size={18} />
+                <span>{loading ? 'Traitement en cours...' : 'Confirmer le virement'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

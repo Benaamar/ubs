@@ -58,7 +58,7 @@ function Clients() {
 
 
   const filteredClients = clients.filter(client =>
-    client.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (client.firstName && client.firstName.toLowerCase().includes(searchTerm.toLowerCase())) ||
     client.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     client.accountNumber.includes(searchTerm)
   )
@@ -136,7 +136,7 @@ function Clients() {
             <div key={client._id} className="client-card">
               <div className="client-content">
                 <div className="client-name">
-                  {client.firstName} {client.lastName}
+                  {client.firstName ? `${client.firstName} ` : ''}{client.lastName}
                 </div>
                 <div className="client-account-number">
                   {client.accountNumber}

@@ -102,7 +102,7 @@ function ClientDetail() {
           <FiArrowLeft size={20} />
         </button>
         <div className="header-content">
-          <h1>{client.firstName} {client.lastName}</h1>
+          <h1>{client.firstName ? `${client.firstName} ` : ''}{client.lastName}</h1>
         </div>
         <div className="header-actions">
           <Link to={`/operations/new?clientId=${id}`} className="btn btn-primary">
@@ -134,7 +134,7 @@ function ClientDetail() {
               <FiUser size={16} />
               Prénom
             </label>
-            <span>{client.firstName}</span>
+            <span>{client.firstName || '-'}</span>
           </div>
           <div className="info-item">
             <label>

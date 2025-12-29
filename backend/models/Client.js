@@ -8,8 +8,9 @@ const clientSchema = new mongoose.Schema({
   },
   firstName: {
     type: String,
-    required: [true, 'Please provide a first name'],
-    trim: true
+    required: false,
+    trim: true,
+    default: ''
   },
   lastName: {
     type: String,
@@ -18,9 +19,10 @@ const clientSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: [true, 'Please provide an email'],
+    required: false,
     lowercase: true,
-    trim: true
+    trim: true,
+    default: null
   },
   phone: {
     type: String,
@@ -38,6 +40,22 @@ const clientSchema = new mongoose.Schema({
     required: false,
     default: null
   },
+  bankName: {
+    type: String,
+    required: [true, 'Please provide a bank name'],
+    trim: true
+  },
+  swiftCode: {
+    type: String,
+    required: [true, 'Please provide a SWIFT code'],
+    trim: true,
+    uppercase: true
+  },
+  bankAddress: {
+    type: String,
+    required: [true, 'Please provide a bank address'],
+    trim: true
+  },
   balance: {
     type: Number,
     default: 0,
@@ -52,8 +70,20 @@ const clientSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Generate account number before saving (fallback if not set in route)
+// Generate account number and email before saving (fallback if not set in route)
 clientSchema.pre('save', async function(next) {
+  // Generate email if not provided
+  if (!this.email) {
+    const firstName = (this.firstName || '').toLowerCase().replace(/\s+/g, '');
+    const lastName = (this.lastName || '').toLowerCase().replace(/\s+/g, '');
+    if (firstName) {
+      this.email = `${firstName}.${lastName}@beneficiary.local`;
+    } else {
+      this.email = `${lastName}@beneficiary.local`;
+    }
+  }
+  
+  // Generate account number if not provided
   if (!this.accountNumber || this.accountNumber === null) {
     try {
       const timestamp = Date.now().toString().slice(-8);
