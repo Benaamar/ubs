@@ -29,5 +29,5 @@ Voir les guides de configuration dans le dossier racine pour :
 
 ---
 
-*Dernière mise à jour : Décembre 2024* 
+*Dernière mise à jour : Décembre 2024 - Version mise à jour avec améliorations*
 
