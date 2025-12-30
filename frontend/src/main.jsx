@@ -3,6 +3,11 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
 
+// Debug: Afficher la configuration de l'API
+console.log('🔧 Configuration API:')
+console.log('VITE_API_URL:', import.meta.env.VITE_API_URL)
+console.log('Base URL finale:', `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api`)
+
 // Enregistrer le Service Worker pour PWA
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {

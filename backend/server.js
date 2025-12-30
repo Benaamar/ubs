@@ -5,11 +5,50 @@ require('dotenv').config();
 
 const app = express();
 
-// Middleware
+// Middleware CORS - Configuration pour production et développement
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://localhost:3002',
+  'https://ubs-nu.vercel.app',
+  /\.vercel\.app$/, // Tous les domaines Vercel
+  /\.loca\.lt$/, // Tous les domaines localtunnel
+  /\.ngrok\.io$/ // Tous les domaines ngrok
+];
+
 app.use(cors({
-  origin: '*', // Autoriser toutes les origines pour ngrok
-  credentials: true
+  origin: function (origin, callback) {
+    // Permettre les requêtes sans origin (comme les apps mobiles ou curl)
+    if (!origin) return callback(null, true);
+    
+    // Vérifier si l'origin est autorisée
+    const isAllowed = allowedOrigins.some(allowedOrigin => {
+      if (typeof allowedOrigin === 'string') {
+        return origin === allowedOrigin;
+      }
+      if (allowedOrigin instanceof RegExp) {
+        return allowedOrigin.test(origin);
+      }
+      return false;
+    });
+    
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      console.log('CORS blocked origin:', origin);
+      callback(null, true); // En production, on autorise quand même pour le moment
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'ngrok-skip-browser-warning', 'bypass-tunnel-reminder'],
+  exposedHeaders: ['Content-Length', 'X-JSON'],
+  maxAge: 86400 // 24 heures
 }));
+
+// Options preflight pour toutes les routes
+app.options('*', cors());
+
 app.use(express.json());
 
 // Root route - redirect to /api/auth

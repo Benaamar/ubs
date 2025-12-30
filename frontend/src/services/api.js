@@ -14,8 +14,9 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
-    // Ajouter le header ngrok pour toutes les requêtes
+    // Ajouter les headers pour ngrok et localtunnel
     config.headers['ngrok-skip-browser-warning'] = 'true'
+    config.headers['bypass-tunnel-reminder'] = 'true'
     console.log('API Request:', config.method?.toUpperCase(), config.url, config.baseURL)
     return config
   },
