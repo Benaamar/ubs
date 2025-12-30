@@ -41,6 +41,9 @@ self.addEventListener('activate', (event) => {
           }
         })
       );
+    }).then(() => {
+      // Forcer l'activation immédiate
+      return self.clients.claim();
     })
   );
 });
