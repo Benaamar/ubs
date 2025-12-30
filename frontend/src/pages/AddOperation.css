@@ -482,6 +482,17 @@
   margin-top: 2px;
 }
 
+.confirmation-note div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.confirmation-note strong {
+  font-weight: 600;
+  color: #78350f;
+}
+
 .confirmation-actions {
   display: flex;
   gap: 12px;

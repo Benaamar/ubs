@@ -362,33 +362,39 @@ function AddOperation() {
                 
                 <div className="confirmation-details">
                   <div className="confirmation-detail-item">
-                    <span className="detail-label">Type de virement :</span>
+                    <span className="detail-label">Type de virement choisi :</span>
                     <span className="detail-value">
                       {formData.transferType === 'instant' ? (
                         <>
                           <FiZap size={16} />
-                          Virement instantané (traitement immédiat)
+                          <strong>Virement instantané</strong>
                         </>
                       ) : (
                         <>
                           <FiClock size={16} />
-                          Virement en 2/3 jours (traitement sous 2-3 jours ouvrables)
+                          <strong>Virement en 2/3 jours</strong>
                         </>
                       )}
                     </span>
                   </div>
                   
-                  {formData.transferType === 'instant' && (
+                  {formData.transferType === 'instant' ? (
                     <div className="confirmation-note">
-                      <FiAlertCircle size={16} />
-                      <span>Le montant maximum pour un virement instantané est de {MAX_INSTANT_AMOUNT.toLocaleString('fr-CH')} CHF.</span>
+                      <FiZap size={16} />
+                      <div>
+                        <strong>Traitement immédiat</strong>
+                        <br />
+                        <span>Le montant maximum pour un virement instantané est de <strong>{MAX_INSTANT_AMOUNT.toLocaleString('fr-CH')} CHF</strong>.</span>
+                      </div>
                     </div>
-                  )}
-                  
-                  {formData.transferType === 'delayed' && (
+                  ) : (
                     <div className="confirmation-note">
                       <FiClock size={16} />
-                      <span>Ce virement sera traité sous 2-3 jours ouvrables. Montant illimité.</span>
+                      <div>
+                        <strong>Traitement sous 2-3 jours ouvrables</strong>
+                        <br />
+                        <span>Montant illimité pour ce type de virement.</span>
+                      </div>
                     </div>
                   )}
                 </div>
