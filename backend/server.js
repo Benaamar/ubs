@@ -74,6 +74,8 @@ app.use('/api/operations', require('./routes/operations'));
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/bank-management', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 60000, // 60 secondes au lieu de 30
+  socketTimeoutMS: 60000,
 })
 .then(async () => {
   console.log('MongoDB Connected');
