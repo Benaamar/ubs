@@ -88,7 +88,10 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    console.log('Login attempt for:', email);
+
     if (!email || !password) {
+      console.log('Missing email or password');
       return res.status(400).json({
         success: false,
         message: 'Please provide email and password'
@@ -97,14 +100,19 @@ router.post('/login', async (req, res) => {
 
     const user = await User.findOne({ email }).select('+password');
     if (!user) {
+      console.log('User not found:', email);
       return res.status(401).json({
         success: false,
         message: 'Invalid credentials'
       });
     }
 
+    console.log('User found, checking password...');
     const isMatch = await user.comparePassword(password);
+    console.log('Password match result:', isMatch);
+    
     if (!isMatch) {
+      console.log('Password mismatch for user:', email);
       return res.status(401).json({
         success: false,
         message: 'Invalid credentials'
@@ -112,6 +120,7 @@ router.post('/login', async (req, res) => {
     }
 
     const token = generateToken(user._id);
+    console.log('Login successful for:', email);
 
     res.json({
       success: true,
@@ -124,6 +133,7 @@ router.post('/login', async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Login error:', error);
     res.status(500).json({
       success: false,
       message: error.message
@@ -147,6 +157,45 @@ router.get('/me', protect, async (req, res) => {
       }
     });
   } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+});
+
+// @route   POST /api/auth/reset-demo
+// @desc    Reset demo account (for fixing password hash issues)
+// @access  Public
+router.post('/reset-demo', async (req, res) => {
+  try {
+    const demoEmail = 'demo@bank.com';
+    
+    // Delete existing demo account
+    await User.deleteOne({ email: demoEmail });
+    console.log('Deleted old demo account');
+    
+    // Create new demo account with proper password hashing
+    const demoUser = await User.create({
+      email: demoEmail,
+      password: 'demo123',
+      firstName: 'Demo',
+      lastName: 'User',
+      role: 'admin'
+    });
+    
+    console.log('Created new demo account with proper password hash');
+    
+    res.json({
+      success: true,
+      message: 'Demo account reset successfully',
+      account: {
+        email: 'demo@bank.com',
+        password: 'demo123'
+      }
+    });
+  } catch (error) {
+    console.error('Error resetting demo account:', error);
     res.status(500).json({
       success: false,
       message: error.message
