@@ -66,7 +66,7 @@ function Register() {
       <div className="auth-card">
         <div className="auth-header">
           <div className="auth-logo">
-            <div className="logo-icon">🏦</div>
+            <img src="/images/ubs.png" alt="UBS Logo" className="logo-icon" />
           </div>
           <h1>Créer un compte</h1>
           <p>Rejoignez-nous dès aujourd'hui</p>
