@@ -51,6 +51,20 @@ app.options('*', cors());
 
 app.use(express.json());
 
+// Middleware to ensure DB connection
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error('Database connection failed:', error);
+    res.status(503).json({
+      success: false,
+      message: 'Database connection failed. Please try again later.'
+    });
+  }
+});
+
 // Root route - redirect to /api/auth
 app.get('/', (req, res) => {
   res.redirect('/api/auth');
@@ -61,8 +75,31 @@ app.get('/health', (req, res) => {
   res.json({
     success: true,
     status: 'OK',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    database: isConnected ? 'Connected' : 'Disconnected'
   });
+});
+
+// Initialize database and demo account
+app.get('/api/init', async (req, res) => {
+  try {
+    await connectDB();
+    await createDemoAccount();
+    res.json({
+      success: true,
+      message: 'Database initialized successfully',
+      demoAccount: {
+        email: 'demo@bank.com',
+        password: 'demo123'
+      }
+    });
+  } catch (error) {
+    console.error('Initialization error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Initialization failed: ' + error.message
+    });
+  }
 });
 
 // Routes
@@ -71,18 +108,34 @@ app.use('/api/clients', require('./routes/clients'));
 app.use('/api/operations', require('./routes/operations'));
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/bank-management', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 60000, // 60 secondes au lieu de 30
-  socketTimeoutMS: 60000,
-})
-.then(async () => {
-  console.log('MongoDB Connected');
-  // Create demo account if it doesn't exist
-  await createDemoAccount();
-})
-.catch(err => console.error('MongoDB connection error:', err));
+let isConnected = false;
+
+const connectDB = async () => {
+  if (isConnected) {
+    console.log('Using existing MongoDB connection');
+    return;
+  }
+
+  try {
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/bank-management', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 60000,
+      socketTimeoutMS: 60000,
+    });
+    isConnected = true;
+    console.log('MongoDB Connected');
+    
+    // Create demo account if it doesn't exist
+    await createDemoAccount();
+  } catch (err) {
+    console.error('MongoDB connection error:', err);
+    throw err;
+  }
+};
+
+// Initialize connection
+connectDB().catch(err => console.error('Initial DB connection failed:', err));
 
 // Create demo account
 async function createDemoAccount() {
