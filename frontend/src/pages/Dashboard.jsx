@@ -307,7 +307,7 @@ function Dashboard() {
                               : client.lastName}
                           </div>
                           <div className="operation-card-bank-name">
-                            {client.bankName}
+                            {client.firstName}
                           </div>
                           <div className="operation-card-iban">
                             IBAN: {client.accountNumber || 'Non disponible'}
