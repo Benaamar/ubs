@@ -227,13 +227,17 @@ function AddOperation() {
               value={formData.adminAccountType}
               onChange={handleChange}
               required
+              className="account-select-compact"
             >
               {adminAccounts.map((account) => (
                 <option key={account.id} value={account.id}>
-                  {account.name} - {account.iban}
+                  {account.name}
                 </option>
               ))}
             </select>
+            <div className="selected-account-iban">
+              IBAN: {adminAccounts.find(acc => acc.id === formData.adminAccountType)?.iban}
+            </div>
             {adminAccount && (
               <div className="account-info-box">
                 <div className="account-balance">

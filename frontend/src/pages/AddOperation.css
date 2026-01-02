@@ -635,6 +635,30 @@
   }
 }
 
+/* Compact Account Select */
+.account-select-compact {
+  font-size: 14px !important;
+  padding: 10px 40px 10px 14px !important;
+  min-height: 40px !important;
+}
+
+.account-select-compact option {
+  font-size: 13px !important;
+  padding: 8px 10px !important;
+  min-height: 32px !important;
+}
+
+.selected-account-iban {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #6c757d;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.3px;
+}
+
 /* Account Info Box */
 .account-info-box {
   margin-top: 12px;
@@ -657,7 +681,7 @@
 }
 
 .account-balance strong {
-  color: #1a9b5e;
+  color: #ff0000;
   font-size: 16px;
   font-weight: 700;
 }
