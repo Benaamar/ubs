@@ -47,7 +47,7 @@ function Accounts() {
       name: 'Compte Épargne',
       iban: 'CH81 0024 1016 3852 9450 1',
       type: 'Compte d\'épargne rémunéré',
-      icon: FiDollarSign,
+      icon: 'CHF',
       color: '#f59e0b',
       description: 'Épargne rémunérée pour vos projets'
     }
@@ -125,12 +125,19 @@ function Accounts() {
         {accounts.map((account) => {
           const Icon = account.icon
           const showBalance = showBalances[account.id]
+          const isTextIcon = typeof Icon === 'string'
 
           return (
             <div key={account.id} className="account-card">
               <div className="account-card-header">
                 <div className="account-icon" style={{ backgroundColor: `${account.color}20` }}>
-                  <Icon size={28} style={{ color: account.color }} />
+                  {isTextIcon ? (
+                    <span style={{ color: account.color, fontSize: '20px', fontWeight: 'bold' }}>
+                      {Icon}
+                    </span>
+                  ) : (
+                    <Icon size={28} style={{ color: account.color }} />
+                  )}
                 </div>
                 <button 
                   className="eye-btn"

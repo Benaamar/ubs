@@ -241,7 +241,7 @@
 .amount {
   font-size: 32px;
   font-weight: 700;
-  color: var(--color-text);
+  color: #ff0000;
   letter-spacing: -1px;
 }
 
@@ -354,7 +354,7 @@
 }
 
 .operation-card-amount.amount-positive {
-  color: #1a9b5e;
+  color: #ff0000;
 }
 
 .operation-card-amount.amount-negative {

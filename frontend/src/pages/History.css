@@ -208,11 +208,11 @@
 }
 
 .operation-amount.positive {
-  color: #10b981;
+  color: #ff0000;
 }
 
 .operation-amount.negative {
-  color: var(--text-primary);
+  color: #ff0000;
 }
 
 .operation-client {

@@ -154,21 +154,22 @@
   background-repeat: no-repeat;
   background-position: right 16px center;
   background-size: 12px;
-  padding-right: 44px;
-  min-height: 48px;
+  padding: 10px 44px 10px 16px;
+  min-height: 42px;
   height: auto;
-  line-height: 1.5;
+  font-size: 13px;
+  line-height: 1.4;
   box-sizing: border-box;
 }
 
 .form-group select option {
-  padding: 14px 16px;
+  padding: 10px 12px;
   white-space: normal;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  font-size: 14px;
-  line-height: 1.6;
-  min-height: 44px;
+  font-size: 12px;
+  line-height: 1.4;
+  min-height: 36px;
 }
 
 .form-group input:focus,
