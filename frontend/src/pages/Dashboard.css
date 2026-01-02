@@ -281,16 +281,19 @@
 
 .operation-card-content {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
 }
 
 .operation-card-header {
-  margin-bottom: 12px;
+  flex: 1;
+  min-width: 0;
 }
 
 .operation-card-bank {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
 }
 
@@ -298,12 +301,36 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  flex: 1;
+}
+
+.operation-card-beneficiary-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--color-text);
+  margin-bottom: 2px;
 }
 
 .operation-card-bank-name {
-  font-weight: 600;
-  font-size: 1rem;
-  color: var(--color-text);
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.operation-card-iban {
+  font-size: 0.8125rem;
+  color: #888;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.3px;
+}
+
+.operation-card-datetime {
+  font-size: 0.75rem;
+  color: #999;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .operation-card-account {
@@ -313,10 +340,11 @@
 }
 
 .operation-card-amount {
-  margin-top: 12px;
   font-size: 18px;
   font-weight: bold;
   text-align: right;
+  white-space: nowrap;
+  align-self: flex-start;
 }
 
 .operation-card-amount.amount-positive {

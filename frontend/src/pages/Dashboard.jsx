@@ -260,6 +260,35 @@ function Dashboard() {
                 // Un transfer avec clientId = virement vers bénéficiaire (crédit)
                 const isIncoming = op.type === 'transfer' || op.type === 'deposit'
 
+                // Formater la date et l'heure
+                const formatDateTime = (dateString) => {
+                  const date = new Date(dateString)
+                  const today = new Date()
+                  const yesterday = new Date(today)
+                  yesterday.setDate(yesterday.getDate() - 1)
+                  
+                  const time = date.toLocaleTimeString('fr-FR', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                  })
+                  
+                  // Si c'est aujourd'hui
+                  if (date.toDateString() === today.toDateString()) {
+                    return `Aujourd'hui à ${time}`
+                  }
+                  // Si c'est hier
+                  if (date.toDateString() === yesterday.toDateString()) {
+                    return `Hier à ${time}`
+                  }
+                  // Sinon afficher la date complète
+                  const dateStr = date.toLocaleDateString('fr-FR', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                  })
+                  return `${dateStr} à ${time}`
+                }
+
                 return (
                   <div key={op._id} className="operation-card">
                     <div className="operation-card-content">
@@ -272,11 +301,19 @@ function Dashboard() {
                           )}
 
                           <div className="operation-card-bank-info">
+                            <div className="operation-card-beneficiary-name">
+                              {client.firstName && client.firstName.trim() 
+                                ? `${client.firstName} ${client.lastName}` 
+                                : client.lastName}
+                            </div>
                             <div className="operation-card-bank-name">
                               {client.bankName}
                             </div>
-                            <div className="operation-card-account">
-                              {formatAccountNumber(client.accountNumber)}
+                            <div className="operation-card-iban">
+                              IBAN: {client.accountNumber || 'Non disponible'}
+                            </div>
+                            <div className="operation-card-datetime">
+                              {formatDateTime(op.createdAt)}
                             </div>
                           </div>
                         </div>
