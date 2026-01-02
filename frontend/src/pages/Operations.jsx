@@ -286,9 +286,9 @@ function Operations() {
 
                       <div className="operation-card-bank-info">
                         <div className="operation-card-beneficiary-name">
-                          {client.lastName && client.lastName !== client.bankName 
-                            ? client.lastName 
-                            : client.bankName}
+                          {client.firstName && client.firstName.trim() 
+                            ? `${client.firstName} ${client.lastName}` 
+                            : client.lastName}
                         </div>
                         <div className="operation-card-iban">
                           IBAN: {client.accountNumber || 'Non disponible'}
