@@ -257,8 +257,9 @@ function Dashboard() {
                 }
 
                 const cardType = getCardType(client.bankName)
-                // Un transfer avec clientId = virement vers bénéficiaire (crédit)
-                const isIncoming = op.type === 'transfer' || op.type === 'deposit'
+                // Les virements (transfer) sont des débits (sortie d'argent vers bénéficiaire)
+                // Seuls les deposits sont des crédits (entrée d'argent)
+                const isIncoming = op.type === 'deposit'
 
                 // Formater la date et l'heure
                 const formatDateTime = (dateString) => {
