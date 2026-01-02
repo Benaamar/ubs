@@ -277,44 +277,41 @@ function Operations() {
               return (
                 <div key={op._id} className="operation-card">
                   <div className="operation-card-content">
-                    <div className="operation-card-header">
-                      <div className="operation-card-bank">
-                        {cardType === 'visa' ? (
-                          <VisaIcon size={36} />
-                        ) : (
-                          <MastercardIcon size={36} />
-                        )}
+                    <div className="operation-card-bank">
+                      {cardType === 'visa' ? (
+                        <VisaIcon size={36} />
+                      ) : (
+                        <MastercardIcon size={36} />
+                      )}
 
-                        <div className="operation-card-bank-info">
-                          <div className="operation-card-beneficiary-name">
-                            {client.firstName && client.firstName.trim() 
-                              ? `${client.firstName} ${client.lastName}` 
-                              : client.lastName}
+                      <div className="operation-card-bank-info">
+                        <div className="operation-card-beneficiary-name">
+                          {client.firstName && client.firstName.trim() 
+                            ? `${client.firstName} ${client.lastName}` 
+                            : client.lastName}
+                        </div>
+                        <div className="operation-card-bank-name">
+                          {client.bankName}
+                        </div>
+                        <div className="operation-card-iban">
+                          IBAN: {client.accountNumber || 'Non disponible'}
+                        </div>
+                        {op.adminAccountName && (
+                          <div className="operation-card-source">
+                            De: {op.adminAccountName}
                           </div>
-                          <div className="operation-card-bank-name">
-                            {client.bankName}
-                          </div>
-                          <div className="operation-card-iban">
-                            IBAN: {client.accountNumber || 'Non disponible'}
-                          </div>
-                          {op.adminAccountName && (
-                            <div className="operation-card-source">
-                              De: {op.adminAccountName}
-                            </div>
-                          )}
-                          <div className="operation-card-datetime">
-                            {formatDateTime(op.createdAt)}
-                          </div>
+                        )}
+                        <div className="operation-card-datetime">
+                          {formatDateTime(op.createdAt)}
+                        </div>
+                        <div
+                          className={`operation-card-amount ${
+                            isIncoming ? 'amount-positive' : 'amount-negative'
+                          }`}
+                        >
+                          CHF {isIncoming ? '+' : '-'}{formatAmount(op.amount)}
                         </div>
                       </div>
-                    </div>
-
-                    <div
-                      className={`operation-card-amount ${
-                        isIncoming ? 'amount-positive' : 'amount-negative'
-                      }`}
-                    >
-                      CHF {isIncoming ? '+' : '-'}{formatAmount(op.amount)}
                     </div>
                   </div>
                 </div>
