@@ -29,6 +29,30 @@ const operationSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  // Informations du compte admin source (pour virements sortants)
+  adminAccountType: {
+    type: String,
+    enum: ['courant', 'livret-a', 'epargne'],
+    default: 'courant'
+  },
+  adminAccountName: {
+    type: String,
+    trim: true
+  },
+  adminAccountIban: {
+    type: String,
+    trim: true
+  },
+  // Type et vitesse de transfert
+  transferType: {
+    type: String,
+    enum: ['instant', 'delayed'],
+    default: 'instant'
+  },
+  transferSpeed: {
+    type: String,
+    trim: true
+  },
   status: {
     type: String,
     enum: ['pending', 'completed', 'failed', 'cancelled'],

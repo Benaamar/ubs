@@ -15,6 +15,7 @@ function AddOperation() {
   const [formData, setFormData] = useState({
     clientId: clientIdParam || '',
     adminAccountId: '',
+    adminAccountType: 'courant', // Type de compte admin source
     amount: '',
     description: '',
     transferType: 'instant' // 'instant' ou 'delayed'
@@ -24,6 +25,13 @@ function AddOperation() {
   const [showConfirmation, setShowConfirmation] = useState(false)
 
   const MAX_INSTANT_AMOUNT = 20000 // 20k CHF maximum pour virement instantané
+
+  // Comptes disponibles pour l'admin
+  const adminAccounts = [
+    { id: 'courant', name: 'Compte Courant', iban: 'CH93 0076 2011 6238 5295 7', icon: FiLayers },
+    { id: 'livret-a', name: 'Livret A', iban: 'CH55 0023 5235 8890 1234 5', icon: FiSave },
+    { id: 'epargne', name: 'Compte Épargne', iban: 'CH81 0024 1016 3852 9450 1', icon: FiDollarSign }
+  ]
 
   useEffect(() => {
     loadClients()
@@ -93,8 +101,8 @@ function AddOperation() {
       return
     }
 
-    if (!formData.adminAccountId) {
-      setError('Veuillez sélectionner le compte de l\'admin')
+    if (!formData.adminAccountType) {
+      setError('Veuillez sélectionner le compte source')
       return
     }
 
@@ -121,9 +129,14 @@ function AddOperation() {
     try {
       const amount = parseFloat(formData.amount)
       
+      const selectedAccount = adminAccounts.find(acc => acc.id === formData.adminAccountType)
+      
       const payload = {
         clientId: formData.clientId,
-        adminAccountId: formData.adminAccountId,
+        adminAccountId: adminAccount?.id,
+        adminAccountType: formData.adminAccountType,
+        adminAccountName: selectedAccount?.name,
+        adminAccountIban: selectedAccount?.iban,
         type: 'transfer',
         amount: amount,
         description: formData.description || '',
@@ -204,27 +217,34 @@ function AddOperation() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="adminAccountId">
+            <label htmlFor="adminAccountType">
               <FiLayers size={16} />
-              Compte de l'admin <span className="required">*</span>
+              Compte source (Admin) <span className="required">*</span>
             </label>
             <select
-              id="adminAccountId"
-              name="adminAccountId"
-              value={formData.adminAccountId}
+              id="adminAccountType"
+              name="adminAccountType"
+              value={formData.adminAccountType}
               onChange={handleChange}
               required
             >
-              <option value="">Sélectionner le compte de l'admin</option>
-              {adminAccount && (
-                <option value={adminAccount.id}>
-                  Mon Compte - Solde: {adminBalance.toLocaleString('fr-CH', { 
+              {adminAccounts.map((account) => (
+                <option key={account.id} value={account.id}>
+                  {account.name} - {account.iban}
+                </option>
+              ))}
+            </select>
+            {adminAccount && (
+              <div className="account-info-box">
+                <div className="account-balance">
+                  <span>Solde disponible:</span>
+                  <strong>{adminBalance.toLocaleString('fr-CH', { 
                     minimumFractionDigits: 2, 
                     maximumFractionDigits: 2 
-                  })} CHF
-                </option>
-              )}
-            </select>
+                  })} CHF</strong>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="form-group">

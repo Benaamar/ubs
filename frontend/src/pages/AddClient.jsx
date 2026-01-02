@@ -104,7 +104,7 @@ function AddClient() {
 
           <div className="form-group">
             <label htmlFor="accountNumber">
-              Numéro de compte <span className="required">*</span>
+            RIB <span className="required">*</span>
             </label>
             <input
               type="text"
@@ -112,7 +112,7 @@ function AddClient() {
               name="accountNumber"
               value={formData.accountNumber}
               onChange={handleChange}
-              placeholder="Numéro de compte bancaire"
+              placeholder="RIB"
               required
             />
           </div>

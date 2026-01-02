@@ -324,6 +324,14 @@
   letter-spacing: 0.3px;
 }
 
+.operation-card-source {
+  font-size: 0.8125rem;
+  color: #007bff;
+  font-weight: 500;
+  margin-top: 4px;
+  font-style: italic;
+}
+
 .operation-card-datetime {
   font-size: 0.75rem;
   color: #999;
@@ -352,7 +360,7 @@
 }
 
 .operation-card-amount.amount-negative {
-  color: #d64545;
+  color: #ff0000;
 }
 
 @media (max-width: 768px) {

@@ -313,6 +313,11 @@ function Dashboard() {
                             <div className="operation-card-iban">
                               IBAN: {client.accountNumber || 'Non disponible'}
                             </div>
+                            {op.adminAccountName && (
+                              <div className="operation-card-source">
+                                De: {op.adminAccountName}
+                              </div>
+                            )}
                             <div className="operation-card-datetime">
                               {formatDateTime(op.createdAt)}
                             </div>
