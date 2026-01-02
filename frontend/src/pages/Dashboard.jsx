@@ -302,7 +302,7 @@ function Dashboard() {
 
                         <div className="operation-card-bank-info">
                           <div className="operation-card-beneficiary-name">
-                            {client.lastName}
+                            {client.lastName || client.bankName}
                           </div>
                           <div className="operation-card-bank-name">
                             {client.bankName}
