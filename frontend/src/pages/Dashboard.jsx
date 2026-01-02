@@ -302,12 +302,10 @@ function Dashboard() {
 
                         <div className="operation-card-bank-info">
                           <div className="operation-card-beneficiary-name">
-                            {client.firstName && client.firstName.trim() 
-                              ? `${client.firstName} ${client.lastName}` 
-                              : client.lastName}
+                            {client.lastName}
                           </div>
                           <div className="operation-card-bank-name">
-                            {client.firstName}
+                            {client.bankName}
                           </div>
                           <div className="operation-card-iban">
                             IBAN: {client.accountNumber || 'Non disponible'}
