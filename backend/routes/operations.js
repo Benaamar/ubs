@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
     }
 
     const operations = await Operation.find(query)
-      .populate('clientId', 'bankName accountNumber')
+      .populate('clientId', 'firstName lastName bankName accountNumber')
       .sort({ createdAt: -1 });
 
     // Debug: vérifier que les données sont bien populées
@@ -59,7 +59,7 @@ router.get('/:id', async (req, res) => {
     const operation = await Operation.findOne({ 
       _id: req.params.id, 
       userId: req.user.id 
-    }).populate('clientId', 'bankName accountNumber');
+    }).populate('clientId', 'firstName lastName bankName accountNumber');
 
     if (!operation) {
       return res.status(404).json({
@@ -143,7 +143,7 @@ router.post('/', async (req, res) => {
         console.log('Operation created successfully:', operation._id);
 
         const populatedOperation = await Operation.findById(operation._id)
-          .populate('clientId', 'bankName accountNumber');
+          .populate('clientId', 'firstName lastName bankName accountNumber');
 
         return res.status(201).json({
           success: true,
