@@ -138,7 +138,7 @@ function AppRoutes() {
         }
       />
       <Route
-        path="/plus"
+        path="/more"
         element={
           <PrivateRoute>
             <Layout>
