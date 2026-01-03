@@ -139,6 +139,14 @@ function Dashboard() {
     navigate('/login')
   }
 
+  // Fonction pour gérer le clic sur une opération
+  const handleOperationClick = (operation) => {
+    // Stocker les détails de l'opération pour la page de détails
+    localStorage.setItem('selectedOperation', JSON.stringify(operation))
+    // Naviguer vers la page de détails
+    navigate('/operation-details')
+  }
+
   if (loading) {
     return (
       <div className="dashboard-container">
@@ -293,7 +301,7 @@ function Dashboard() {
                 }
 
                 return (
-                  <div key={op._id} className="operation-card">
+                  <div key={op._id} className="operation-card" onClick={() => handleOperationClick(op)}>
                     <div className="operation-card-content">
                       <div className="operation-card-bank">
                         {cardType === 'visa' ? (
@@ -308,22 +316,8 @@ function Dashboard() {
                               ? `${client.firstName} ${client.lastName}` 
                               : client.lastName}
                           </div>
-                          <div className="operation-card-iban">
-                            IBAN: {client.accountNumber || 'Non disponible'}
-                          </div>
-                          <div className="operation-card-bank-name">
-                            Banque: {client.bankName || 'Non spécifiée'}
-                          </div>
-                          {op.adminAccountName && (
-                            <div className="operation-card-source">
-                              De: {op.adminAccountName}
-                            </div>
-                          )}
                           <div className="operation-card-datetime">
                             {formatDate(op.createdAt)}
-                          </div>
-                          <div className="operation-card-account">
-                            Compte: ***{formatAccountNumber(client.accountNumber)}
                           </div>
                           <div
                             className={`operation-card-amount ${

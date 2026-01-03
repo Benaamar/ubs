@@ -12,6 +12,7 @@ import AddOperation from './pages/AddOperation'
 import LoadBalance from './pages/LoadBalance'
 import History from './pages/History'
 import Accounts from './pages/Accounts'
+import OperationDetails from './pages/OperationDetails'
 import Layout from './components/Layout'
 
 function PrivateRoute({ children }) {
@@ -110,6 +111,16 @@ function AppRoutes() {
           <PrivateRoute>
             <Layout>
               <Accounts />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/operation-details"
+        element={
+          <PrivateRoute>
+            <Layout>
+              <OperationDetails />
             </Layout>
           </PrivateRoute>
         }
