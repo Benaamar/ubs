@@ -57,13 +57,11 @@
 }
 
 .user-card {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
   border-radius: 20px;
   padding: 24px;
   display: flex;
   align-items: center;
   gap: 20px;
-  box-shadow: 0 8px 24px rgba(220, 38, 38, 0.15);
   color: white;
 }
 

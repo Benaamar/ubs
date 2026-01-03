@@ -87,7 +87,7 @@ function Plus() {
               <FiUser size={32} />
             </div>
             <div className="user-info">
-              <h3>{user ? `${user.firstName || ''} ${user.lastName || ''}` : 'Utilisateur'}</h3>
+              <h3>{user ? `${user.firstName || ''} ${user.lastName || ''}` : 'Utilisateur'}</h3> <br />
               <p>Administrateur</p>
             </div>
           </div>
