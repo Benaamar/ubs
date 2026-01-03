@@ -999,6 +999,27 @@
   color: var(--color-primary);
 }
 
+.sidebar-nav-item.logout-btn {
+  color: #dc2626;
+  border-top: 1px solid var(--color-border);
+  margin-top: 10px;
+  padding-top: 15px;
+}
+
+.sidebar-nav-item.logout-btn:hover {
+  background: #fee2e2;
+  border-left-color: #dc2626;
+  color: #dc2626;
+}
+
+.sidebar-nav-item.logout-btn svg {
+  color: #dc2626;
+}
+
+.sidebar-nav-item.logout-btn:hover svg {
+  color: #dc2626;
+}
+
 /* Responsive Sidebar */
 @media (max-width: 480px) {
   .sidebar-menu {

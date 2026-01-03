@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import { useAuth } from '../contexts/AuthContext'
 import { 
@@ -19,7 +19,8 @@ import {
   FiEyeOff,
   FiUsers,
   FiClock,
-  FiX
+  FiX,
+  FiLogOut
 } from 'react-icons/fi'
 import { BiQrScan, BiMessage } from 'react-icons/bi'
 // Composants pour les icônes de cartes depuis Icons8
@@ -48,6 +49,7 @@ import './Dashboard.css'
 
 function Dashboard() {
   const { user } = useAuth()
+  const navigate = useNavigate()
   const [clients, setClients] = useState([])
   const [operations, setOperations] = useState([])
   const [adminBalance, setAdminBalance] = useState(0)
@@ -127,6 +129,14 @@ function Dashboard() {
     const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, "'")
     
     return `${formattedInteger}.${decimalPart}`
+  }
+
+  // Fonction de déconnexion
+  const handleLogout = () => {
+    // Supprimer le token d'authentification du localStorage
+    localStorage.removeItem('token')
+    // Rediriger vers la page de login
+    navigate('/login')
   }
 
   if (loading) {
@@ -410,6 +420,13 @@ function Dashboard() {
             <FiClock size={22} />
             <span>Historique</span>
           </Link>
+          <button 
+            className="sidebar-nav-item logout-btn"
+            onClick={handleLogout}
+          >
+            <FiLogOut size={22} />
+            <span>Déconnexion</span>
+          </button>
         </nav>
       </div>
     </div>
