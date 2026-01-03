@@ -57,7 +57,6 @@ const BankCard = () => {
           {/* Nom et date d'expiration */}
           <div className="card-details">
             <div className="card-holder">
-              <div className="label">Titulaire</div>
               <div className="value">{cardData.cardHolder}</div>
             </div>
             <div className="card-expiry">
