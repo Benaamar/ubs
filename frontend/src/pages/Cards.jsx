@@ -72,10 +72,15 @@ const BankCard = () => {
         {/* Face arrière de la carte */}
         <div className="card-face card-back">
           <div className="card-background"></div>
-          <div className="magnetic-strip"></div>
+          <div className="magnetic-strip">
+            <div className="rib-box-black">
+              <span className="rib-value-white">{cardData.rib}</span>
+            </div>
+          </div>
           <div className="signature-panel">
-            <div className="rib-box">
-              <span className="rib-value">{cardData.rib}</span>
+            <div className="cvv-box">
+              <span className="cvv-label">CVV</span>
+              <span className="cvv-value">{cardData.cvv}</span>
             </div>
           </div>
           <div className="card-info-text">

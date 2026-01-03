@@ -222,6 +222,25 @@
   height: 50px;
   background: linear-gradient(to bottom, #2c2c2c 0%, #1a1a1a 50%, #2c2c2c 100%);
   margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 15px;
+}
+
+.rib-box-black {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.rib-value-white {
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: 400;
+  color: #fff;
+  letter-spacing: 2px;
 }
 
 .signature-panel {
@@ -232,23 +251,30 @@
   border-radius: 5px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   padding: 0 15px;
 }
 
-.rib-box {
+.cvv-box {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 100%;
+  gap: 10px;
 }
 
-.rib-value {
+.cvv-label {
+  font-size: 12px;
+  color: #333;
+  font-weight: bold;
+}
+
+.cvv-value {
   font-family: 'Courier New', monospace;
   font-size: 16px;
-  font-weight: 400;
-  color: #000;
-  letter-spacing: 2px;
+  font-weight: bold;
+  color: #333;
+  background: #f0f0f0;
+  padding: 5px 10px;
+  border-radius: 3px;
 }
 
 .card-info-text {
