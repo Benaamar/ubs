@@ -85,7 +85,6 @@ function Plus() {
         </div>
 
         <div className="menu-section">
-          <h2>Menu</h2>
           <div className="menu-grid">
             {menuItems.map((item, index) => {
               const Icon = item.icon;
