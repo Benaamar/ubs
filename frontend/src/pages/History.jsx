@@ -396,7 +396,7 @@ function History() {
                                 ? `${client.firstName} ${client.lastName}` 
                                 : client.lastName
                             ) : (
-                              'Opération sans client'
+                              ''
                             )}
                           </div>
                           <div className="operation-type">
@@ -481,7 +481,7 @@ function History() {
                                 ? `${client.firstName} ${client.lastName}` 
                                 : client.lastName
                             ) : (
-                              'Opération sans client'
+                              ''
                             )}
                           </div>
                           <div className="operation-type">
