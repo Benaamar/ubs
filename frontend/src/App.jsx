@@ -13,6 +13,7 @@ import LoadBalance from './pages/LoadBalance'
 import History from './pages/History'
 import Accounts from './pages/Accounts'
 import OperationDetails from './pages/OperationDetails'
+import Cards from './pages/Cards'
 import Layout from './components/Layout'
 
 function PrivateRoute({ children }) {
@@ -121,6 +122,16 @@ function AppRoutes() {
           <PrivateRoute>
             <Layout>
               <OperationDetails />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/cards"
+        element={
+          <PrivateRoute>
+            <Layout>
+              <Cards />
             </Layout>
           </PrivateRoute>
         }
