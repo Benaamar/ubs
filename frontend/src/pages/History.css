@@ -165,20 +165,98 @@
   border-radius: var(--border-radius-md);
   padding: var(--spacing-md);
   margin-bottom: var(--spacing-sm);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border: 1px solid #e2e8f0;
   transition: all var(--transition-base);
-  cursor: pointer;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  letter-spacing: 0.2px;
+  line-height: 1.4;
 }
 
 .operation-card:hover {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
 }
 
 .operation-card-content {
   display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-xs);
+}
+
+.operation-card-bank {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+}
+
+.operation-card-bank-info {
+  display: flex;
   flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  letter-spacing: 0.2px;
+  line-height: 1.4;
+}
+
+.operation-icon-placeholder {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  flex-shrink: 0;
+}
+
+.operation-beneficiary-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.operation-iban {
+  font-size: 0.8rem;
+  color: #666;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.operation-bank-name {
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.operation-source {
+  font-size: 0.8rem;
+  color: #0066cc;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.operation-datetime {
+  font-size: 0.75rem;
+  color: #777;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 400;
+}
+
+.operation-account {
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 500;
 }
 
 .operation-info {
@@ -201,12 +279,9 @@
 }
 
 .operation-amount {
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 700;
   white-space: nowrap;
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid #f0f0f0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -218,95 +293,22 @@
   color: #ff0000;
 }
 
-/* Styles pour les cartes bancaires et informations complètes */
-.operation-card-bank {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.operation-card-bank-info {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  flex: 1;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  letter-spacing: 0.2px;
-  line-height: 1.4;
-}
-
-.operation-card-beneficiary-name {
-  font-weight: 600;
-  font-size: 1rem;
-  color: var(--text-primary);
-  margin-bottom: 2px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.operation-card-bank-name {
-  font-weight: 500;
-  font-size: 0.875rem;
-  color: #666;
-}
-
-.operation-card-iban {
-  font-size: 0.8rem;
-  color: #666;
-  font-family: 'Courier New', monospace;
-  letter-spacing: 0.5px;
-  font-weight: 500;
-}
-
-.operation-card-source {
-  font-size: 0.8rem;
-  color: #0066cc;
-  font-weight: 500;
-  margin-top: 2px;
-  font-style: normal;
-}
-
-.operation-card-datetime {
-  font-size: 0.75rem;
-  color: #777;
-  margin-top: 2px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-weight: 400;
-}
-
-.operation-card-account {
-  font-size: 0.8rem;
-  color: #777;
-  letter-spacing: 0.5px;
-  font-weight: 500;
-}
-
-.operation-icon-placeholder {
-  width: 36px;
-  height: 22px;
-  background: #f0f0f0;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #999;
-}
-
 .operation-client {
-  font-size: 0.8125rem;
-  color: #6c757d;
+  font-size: 0.8rem;
+  color: #666;
   margin-top: var(--spacing-xs);
   margin-bottom: var(--spacing-xs);
+  font-weight: 500;
 }
 
 .operation-description {
-  font-size: 0.8125rem;
-  color: #6c757d;
+  font-size: 0.8rem;
+  color: #777;
   margin-top: var(--spacing-xs);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: 400;
 }
 
 .empty-state {
