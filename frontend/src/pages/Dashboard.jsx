@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../services/api'
+import { useAuth } from '../contexts/AuthContext'
 import { 
   FiUser, 
   FiMoreHorizontal,
@@ -46,6 +47,7 @@ const MastercardIcon = ({ size = 32, className = '' }) => (
 import './Dashboard.css'
 
 function Dashboard() {
+  const { user } = useAuth()
   const [clients, setClients] = useState([])
   const [operations, setOperations] = useState([])
   const [adminBalance, setAdminBalance] = useState(0)
@@ -152,7 +154,16 @@ function Dashboard() {
               >
                 <FiUser size={24} />
               </button>
-              <span className="home-label">Home</span>
+              <div className="home-section">
+                <span className="home-label">Home</span>
+                {user && (
+                  <span className="greeting-text">
+                    Bonjour Monsieur {user.firstName && user.lastName 
+                      ? `${user.firstName} ${user.lastName}` 
+                      : user.firstName || user.lastName || ''}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
           <div className="header-right">

@@ -319,7 +319,7 @@ function History() {
                       </div>
                     </div>
                     <div className={`operation-amount ${op.type === 'deposit' ? 'positive' : 'negative'}`}>
-                      {op.type === 'deposit' ? '+' : '-'}{op.amount.toFixed(2)} €
+                      {op.type === 'deposit' ? '+' : '-'}{op.amount.toFixed(2)} CHF
                     </div>
                   </div>
                   {op.client && (
@@ -357,7 +357,7 @@ function History() {
                         </div>
                       </div>
                       <div className={`operation-amount ${op.type === 'deposit' ? 'positive' : 'negative'}`}>
-                        {op.type === 'deposit' ? '+' : '-'}{op.amount.toFixed(2)} €
+                        {op.type === 'deposit' ? '+' : '-'}{op.amount.toFixed(2)} CHF
                       </div>
                     </div>
                     {op.client && (
