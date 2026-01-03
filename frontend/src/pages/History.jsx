@@ -367,64 +367,97 @@ function History() {
         )}
       </div>
 
-      {/* Operations List */}
-      {operations.length === 0 ? (
-        <div className="empty-state">
-          <div className="empty-icon-wrapper">
-            <FiClock size={64} />
+      {/* Recent Transactions */}
+      {operations.length > 0 && (
+        <div className="recent-transactions">
+          <div className="transactions-header">
+            <h3 className="transactions-title">Transactions récentes</h3>
           </div>
-          <h3>Aucune opération trouvée</h3>
-          <p>Aucune opération ne correspond à vos critères de recherche</p>
-        </div>
-      ) : (
-        <div className="operations-list">
-          {/* Pending Operations Section */}
-          {filteredStatusGroups.pending && filteredStatusGroups.pending.length > 0 && (
-            <div className="date-group">
-              <div className="date-header">
-                <span>En traitement</span>
-              </div>
-              {filteredStatusGroups.pending.map((op) => {
-                const client = op.client || op.clientId
+          <div className="operations-list">
+            {operations
+              .filter((op) => {
+                // Afficher uniquement les opérations qui ont un client (transfers vers bénéficiaires)
+                // Les dépôts admin (sans clientId) ne sont pas affichés ici
+                return op.clientId && typeof op.clientId === 'object'
+              })
+              .slice(0, 5)
+              .map((op) => {
+                const client = op.clientId
+                if (!client || !client.bankName) {
+                  return null
+                }
+
+                // Fonction pour obtenir les 3 derniers chiffres du compte avec étoiles
+                const formatAccountNumber = (accountNumber) => {
+                  if (!accountNumber) return '***'
+                  const last3 = accountNumber.slice(-3)
+                  return `***${last3}` 
+                }
+
+                // Fonction pour déterminer le type de carte (Visa ou Mastercard)
+                const getCardType = (bankName) => {
+                  if (!bankName) return 'visa'
+                  const name = bankName.toLowerCase()
+                  if (name.includes('master')) return 'mastercard'
+                  return 'visa'
+                }
+
+                const cardType = getCardType(client.bankName)
+                // Les virements (transfer) sont des débits (sortie d'argent vers bénéficiaire)
+                // Seuls les deposits sont des crédits (entrée d'argent)
                 const isIncoming = op.type === 'deposit'
-                const cardType = client && client.bankName ? getCardType(client.bankName) : 'visa'
-                
+
+                // Formater la date et l'heure
+                const formatDateTime = (dateString) => {
+                  const date = new Date(dateString)
+                  const today = new Date()
+                  const yesterday = new Date(today)
+                  yesterday.setDate(yesterday.getDate() - 1)
+                  
+                  const time = date.toLocaleTimeString('fr-FR', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                  })
+                  
+                  // Si c'est aujourd'hui
+                  if (date.toDateString() === today.toDateString()) {
+                    return `Aujourd'hui à ${time}` 
+                  }
+                  // Si c'est hier
+                  if (date.toDateString() === yesterday.toDateString()) {
+                    return `Hier à ${time}` 
+                  }
+                  // Sinon afficher la date complète
+                  const dateStr = date.toLocaleDateString('fr-FR', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                  })
+                  return `${dateStr} à ${time}` 
+                }
+
                 return (
                   <div key={op._id} className="operation-card">
                     <div className="operation-card-content">
                       <div className="operation-card-bank">
-                        {client && client.bankName ? (
-                          cardType === 'visa' ? (
-                            <VisaIcon size={36} />
-                          ) : (
-                            <MastercardIcon size={36} />
-                          )
+                        {cardType === 'visa' ? (
+                          <VisaIcon size={36} />
                         ) : (
-                          <div className="operation-icon-placeholder">
-                            <FiClock size={24} />
-                          </div>
+                          <MastercardIcon size={36} />
                         )}
 
                         <div className="operation-card-bank-info">
                           <div className="operation-card-beneficiary-name">
-                            {client ? (
-                              client.firstName && client.firstName.trim() 
-                                ? `${client.firstName} ${client.lastName}` 
-                                : client.lastName
-                            ) : (
-                              'Opération système'
-                            )}
+                            {client.firstName && client.firstName.trim() 
+                              ? `${client.firstName} ${client.lastName}` 
+                              : client.lastName}
                           </div>
-                          {client && (
-                            <div className="operation-card-iban">
-                              IBAN: {client.accountNumber || 'Non disponible'}
+                          <div className="operation-card-iban">
+                            IBAN: {client.accountNumber || 'Non disponible'}
                           </div>
-                          )}
-                          {client && client.bankName && (
-                            <div className="operation-card-bank-name">
-                              Banque: {client.bankName}
-                            </div>
-                          )}
+                          <div className="operation-card-bank-name">
+                            Banque: {client.bankName || 'Non spécifiée'}
+                          </div>
                           {op.adminAccountName && (
                             <div className="operation-card-source">
                               De: {op.adminAccountName}
@@ -433,21 +466,11 @@ function History() {
                           <div className="operation-card-datetime">
                             {formatDateTime(op.createdAt)}
                           </div>
-                          {client && (
-                            <div className="operation-card-account">
-                              Compte: ***{formatAccountNumber(client.accountNumber)}
-                            </div>
-                          )}
-                          <div className="operation-info">
-                            <div className="operation-type">
-                              {getOperationTypeLabel(op.type)}
-                            </div>
-                            <div className="operation-status">
-                              {getStatusLabel(op.status)}
-                            </div>
+                          <div className="operation-card-account">
+                            Compte: ***{formatAccountNumber(client.accountNumber)}
                           </div>
                           <div
-                            className={`operation-amount ${
+                            className={`operation-card-amount ${
                               isIncoming ? 'amount-positive' : 'amount-negative'
                             }`}
                           >
@@ -456,107 +479,10 @@ function History() {
                         </div>
                       </div>
                     </div>
-                    {op.description && (
-                      <div className="operation-description">
-                        {op.description}
-                      </div>
-                    )}
                   </div>
                 )
               })}
-            </div>
-          )}
-
-          {/* Date Groups */}
-          {Object.entries(filteredDateGroups)
-            .sort((a, b) => new Date(b[0]) - new Date(a[0]))
-            .map(([dateKey, ops]) => (
-              <div key={dateKey} className="date-group">
-                <div className="date-header">
-                  <span>{dateKey}</span>
-                </div>
-                {ops.map((op) => {
-                const client = op.client || op.clientId
-                const isIncoming = op.type === 'deposit'
-                const cardType = client && client.bankName ? getCardType(client.bankName) : 'visa'
-                
-                return (
-                  <div key={op._id} className="operation-card">
-                    <div className="operation-card-content">
-                      <div className="operation-card-bank">
-                        {client && client.bankName ? (
-                          cardType === 'visa' ? (
-                            <VisaIcon size={36} />
-                          ) : (
-                            <MastercardIcon size={36} />
-                          )
-                        ) : (
-                          <div className="operation-icon-placeholder">
-                            <FiClock size={24} />
-                          </div>
-                        )}
-
-                        <div className="operation-card-bank-info">
-                          <div className="operation-card-beneficiary-name">
-                            {client ? (
-                              client.firstName && client.firstName.trim() 
-                                ? `${client.firstName} ${client.lastName}` 
-                                : client.lastName
-                            ) : (
-                              'Opération système'
-                            )}
-                          </div>
-                          {client && (
-                            <div className="operation-card-iban">
-                              IBAN: {client.accountNumber || 'Non disponible'}
-                          </div>
-                          )}
-                          {client && client.bankName && (
-                            <div className="operation-card-bank-name">
-                              Banque: {client.bankName}
-                            </div>
-                          )}
-                          {op.adminAccountName && (
-                            <div className="operation-card-source">
-                              De: {op.adminAccountName}
-                            </div>
-                          )}
-                          <div className="operation-card-datetime">
-                            {formatDateTime(op.createdAt)}
-                          </div>
-                          {client && (
-                            <div className="operation-card-account">
-                              Compte: ***{formatAccountNumber(client.accountNumber)}
-                            </div>
-                          )}
-                          <div className="operation-info">
-                            <div className="operation-type">
-                              {getOperationTypeLabel(op.type)}
-                            </div>
-                            <div className="operation-status">
-                              {getStatusLabel(op.status)}
-                            </div>
-                          </div>
-                          <div
-                            className={`operation-amount ${
-                              isIncoming ? 'amount-positive' : 'amount-negative'
-                            }`}
-                          >
-                            CHF {isIncoming ? '+' : '-'}{formatAmount(op.amount)}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {op.description && (
-                      <div className="operation-description">
-                        {op.description}
-                      </div>
-                    )}
-                  </div>
-                )
-              })}
-              </div>
-            ))}
+          </div>
         </div>
       )}
     </div>
