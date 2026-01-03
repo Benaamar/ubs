@@ -154,10 +154,6 @@ function OperationDetails() {
                 <span className="info-label">Banque</span>
                 <span className="info-value">{client.bankName || 'Non spécifiée'}</span>
               </div>
-              <div className="info-item">
-                <span className="info-label">Compte</span>
-                <span className="info-value">***{formatAccountNumber(client.accountNumber)}</span>
-              </div>
             </div>
           </div>
         )}
