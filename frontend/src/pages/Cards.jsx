@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { FiArrowLeft, FiPlus } from 'react-icons/fi';
+import { useAuth } from '../contexts/AuthContext';
 import './Cards.css';
 
 const BankCard = () => {
   const [cardData, setCardData] = useState(null);
   const [isFlipped, setIsFlipped] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
-    // Simuler les données de la carte (en production, viendrait de l'API)
+    // Simuler les données de la carte avec infos admin
     const mockCardData = {
       cardNumber: '4532 1234 5678 9010',
-      cardHolder: 'JEAN DUPONT',
+      cardHolder: user ? `${user.firstName || ''} ${user.lastName || ''}`.toUpperCase() : 'ADMIN USER',
       expiryDate: '12/25',
       cvv: '123',
       cardType: 'VISA',
       cardTier: 'GOLD'
     };
     setCardData(mockCardData);
-  }, []);
+  }, [user]);
 
   if (!cardData) return <div className="loading">Chargement...</div>;
 
@@ -30,11 +32,13 @@ const BankCard = () => {
           
           {/* Logo Visa */}
           <div className="card-logo">
-            <svg width="60" height="20" viewBox="0 0 60 20" fill="none">
-              <text x="0" y="15" fill="white" fontSize="16" fontWeight="bold" fontFamily="Arial">
-                VISA
-              </text>
-            </svg>
+            <img 
+              src="https://img.icons8.com/color/48/visa.png" 
+              alt="Visa" 
+              width={60} 
+              height={20}
+              style={{ objectFit: 'contain' }}
+            />
           </div>
 
           {/* Puce */}
