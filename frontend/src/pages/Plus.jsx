@@ -19,49 +19,41 @@ function Plus() {
       icon: FiUser,
       label: 'Profil',
       description: 'Gérer vos informations personnelles',
-      action: () => navigate('/profile')
     },
     {
       icon: FiSettings,
       label: 'Paramètres',
       description: 'Configurer l\'application',
-      action: () => navigate('/settings')
     },
     {
       icon: FiBell,
       label: 'Notifications',
       description: 'Gérer les alertes et notifications',
-      action: () => navigate('/notifications')
     },
     {
       icon: FiLock,
       label: 'Sécurité',
       description: 'Mot de passe et authentification',
-      action: () => navigate('/security')
     },
     {
       icon: FiShield,
       label: 'Confidentialité',
       description: 'Gestion des données personnelles',
-      action: () => navigate('/privacy')
     },
     {
       icon: FiFileText,
       label: 'Documents',
       description: 'Vos documents et contrats',
-      action: () => navigate('/documents')
     },
     {
       icon: FiHelpCircle,
       label: 'Aide',
       description: 'Centre d\'aide et support',
-      action: () => navigate('/help')
     },
     {
       icon: FiInfo,
       label: 'À propos',
       description: 'Informations sur l\'application',
-      action: () => navigate('/about')
     }
   ];
 
@@ -88,7 +80,6 @@ function Plus() {
             </div>
             <div className="user-info">
               <h3>{user ? `${user.firstName || ''} ${user.lastName || ''}` : 'Utilisateur'}</h3>
-              <p>Administrateur</p>
             </div>
           </div>
         </div>
