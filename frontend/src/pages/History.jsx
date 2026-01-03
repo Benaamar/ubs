@@ -375,10 +375,15 @@ function History() {
           </div>
           <div className="operations-list">
             {operations
-              .slice(0, 10)
+              .filter((op) => {
+                // Afficher uniquement les opérations qui ont un client (transfers vers bénéficiaires)
+                // Les dépôts admin (sans clientId) ne sont pas affichés ici
+                return op.clientId && typeof op.clientId === 'object'
+              })
+              .slice(0, 5)
               .map((op) => {
-                const client = op.clientId || op.client
-                if (!client) {
+                const client = op.clientId
+                if (!client || !client.bankName) {
                   return null
                 }
 
