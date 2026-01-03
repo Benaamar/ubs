@@ -111,13 +111,6 @@ function Cards() {
           </button>
           <h1>Mes Cartes</h1>
         </div>
-        <button 
-          className="add-card-btn"
-          onClick={() => setShowAddCard(!showAddCard)}
-        >
-          <FiPlus size={20} />
-          <span>Ajouter une carte</span>
-        </button>
       </div>
 
       <div className="cards-content">
