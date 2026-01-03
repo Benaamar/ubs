@@ -42,14 +42,6 @@ const BankCard = () => {
             />
           </div>
 
-          {/* Puce */}
-          <div className="card-chip">
-            <div className="chip-line"></div>
-            <div className="chip-line"></div>
-            <div className="chip-line"></div>
-            <div className="chip-line"></div>
-          </div>
-
           {/* Numéro de carte */}
           <div className="card-number">
             {cardData.cardNumber}
