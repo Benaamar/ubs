@@ -311,77 +311,107 @@
 }
 
 .operation-card-bank-info {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  flex: 1;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  letter-spacing: 0.2px;
-  line-height: 1.4;
+  gap: 8px;
 }
 
 .operation-card-beneficiary-name {
-  font-weight: 600;
-  font-size: 1rem;
-  color: var(--color-text);
-  margin-bottom: 2px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.operation-card-bank-name {
-  font-weight: 500;
-  font-size: 0.875rem;
-  color: #666;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 4px;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .operation-card-iban {
-  font-size: 0.8rem;
-  color: #666;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
   font-family: 'Courier New', monospace;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
   letter-spacing: 0.5px;
-  font-weight: 500;
+}
+
+.operation-card-bank-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+  background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
+  padding: 6px 10px;
+  border-radius: 8px;
+  border-left: 4px solid #dc2626;
+  box-shadow: 0 1px 3px rgba(220, 38, 38, 0.1);
 }
 
 .operation-card-source {
-  font-size: 0.8rem;
-  color: #0066cc;
-  font-weight: 500;
-  margin-top: 2px;
-  font-style: normal;
+  font-size: 12px;
+  font-weight: 700;
+  color: #059669;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid #a7f3d0;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  box-shadow: 0 1px 3px rgba(5, 150, 105, 0.1);
 }
 
 .operation-card-datetime {
-  font-size: 0.75rem;
-  color: #777;
-  margin-top: 2px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-weight: 400;
+  font-size: 12px;
+  font-weight: 700;
+  color: #92400e;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid #fcd34d;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 1px 3px rgba(245, 158, 11, 0.1);
 }
 
 .operation-card-account {
-  font-size: 13px;
-  color: #777;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4b5563;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px dashed #9ca3af;
+  font-family: 'Courier New', monospace;
   letter-spacing: 0.5px;
 }
 
 .operation-card-amount {
   font-size: 18px;
-  font-weight: 700;
-  text-align: left;
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid #f0f0f0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 800;
+  padding: 10px 14px;
+  border-radius: 10px;
+  text-align: right;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: 0.5px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 4px;
 }
 
 .operation-card-amount.amount-positive {
-  color: #10b981;
+  color: #059669;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border: 1px solid #a7f3d0;
+  box-shadow: 0 3px 6px rgba(5, 150, 105, 0.15);
 }
 
 .operation-card-amount.amount-negative {
-  color: #ff0000;
+  color: #dc2626;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border: 1px solid #fecaca;
+  box-shadow: 0 3px 6px rgba(220, 38, 38, 0.15);
 }
 
 @media (max-width: 768px) {
