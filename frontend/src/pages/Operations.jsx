@@ -291,7 +291,7 @@ function Operations() {
                             : client.lastName}
                         </div>
                         <div className="operation-card-iban">
-                          IBAN: {client.accountNumber || 'Non disponible'}
+                          RIB: {client.accountNumber || 'Non disponible'}
                         </div>
                         {op.adminAccountName && (
                           <div className="operation-card-source">

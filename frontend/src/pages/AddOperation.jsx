@@ -28,9 +28,9 @@ function AddOperation() {
 
   // Comptes disponibles pour l'admin
   const adminAccounts = [
-    { id: 'courant', name: 'Compte Courant', iban: 'CH93 0076 2011 6238 5295 7', icon: FiLayers },
-    { id: 'livret-a', name: 'Livret A', iban: 'CH55 0023 5235 8890 1234 5', icon: FiSave },
-    { id: 'epargne', name: 'Compte Épargne', iban: 'CH81 0024 1016 3852 9450 1', icon: FiDollarSign }
+    { id: 'courant', name: 'Compte Courant', rib: 'CH93 0076 2011 6238 5295 7', icon: FiLayers },
+    { id: 'livret-a', name: 'Livret A', rib: 'CH55 0023 5235 8890 1234 5', icon: FiSave },
+    { id: 'epargne', name: 'Compte Épargne', rib: 'CH81 0024 1016 3852 9450 1', icon: FiDollarSign }
   ]
 
   useEffect(() => {
@@ -136,7 +136,7 @@ function AddOperation() {
         adminAccountId: adminAccount?.id,
         adminAccountType: formData.adminAccountType,
         adminAccountName: selectedAccount?.name,
-        adminAccountIban: selectedAccount?.iban,
+        adminAccountIban: selectedAccount?.rib,
         type: 'transfer',
         amount: amount,
         description: formData.description || '',
@@ -236,7 +236,7 @@ function AddOperation() {
               ))}
             </select>
             <div className="selected-account-iban">
-              IBAN: {adminAccounts.find(acc => acc.id === formData.adminAccountType)?.iban}
+              RIB: {adminAccounts.find(acc => acc.id === formData.adminAccountType)?.rib}
             </div>
             {adminAccount && (
               <div className="account-info-box">

@@ -407,7 +407,7 @@ function History() {
                           </div>
                           {client && client.accountNumber && (
                             <div className="operation-iban">
-                              IBAN: {client.accountNumber}
+                              RIB: {client.accountNumber}
                             </div>
                           )}
                           {client && client.bankName && (
@@ -492,7 +492,7 @@ function History() {
                           </div>
                           {client && client.accountNumber && (
                             <div className="operation-iban">
-                              IBAN: {client.accountNumber}
+                              RIB: {client.accountNumber}
                             </div>
                           )}
                           {client && client.bankName && (

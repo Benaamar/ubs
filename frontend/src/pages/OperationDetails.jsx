@@ -147,7 +147,7 @@ function OperationDetails() {
                 </span>
               </div>
               <div className="info-item">
-                <span className="info-label">IBAN</span>
+                <span className="info-label">RIB</span>
                 <span className="info-value">{client.accountNumber || 'Non disponible'}</span>
               </div>
               <div className="info-item">

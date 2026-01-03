@@ -27,29 +27,29 @@ function Accounts() {
     {
       id: 'courant',
       name: 'Compte Courant',
-      iban: 'CH93 0076 2011 6238 5295 7',
+      rib: 'CH93 0076 2011 6238 5295 7',
       type: 'Compte de transaction',
       icon: FiLayers,
       color: '#3b82f6',
-      description: 'Compte principal pour vos opérations quotidiennes'
+      description: 'Compte principal pour les transactions quotidiennes'
     },
     {
       id: 'livret-a',
       name: 'Livret A',
-      iban: 'CH55 0023 5235 8890 1234 5',
+      rib: 'CH55 0023 5235 8890 1234 5',
       type: 'Compte d\'épargne',
       icon: FiSave,
       color: '#10b981',
-      description: 'Épargne sécurisée avec disponibilité immédiate'
+      description: 'Épargne sécurisée avec taux préférentiel'
     },
     {
       id: 'epargne',
       name: 'Compte Épargne',
-      iban: 'CH81 0024 1016 3852 9450 1',
+      rib: 'CH81 0024 1016 3852 9450 1',
       type: 'Compte d\'épargne rémunéré',
       icon: 'CHF',
       color: '#f59e0b',
-      description: 'Épargne rémunérée pour vos projets'
+      description: 'Compte épargne avec rémunération progressive'
     }
   ]
 
@@ -154,8 +154,8 @@ function Accounts() {
                 <p className="account-description">{account.description}</p>
 
                 <div className="account-iban-box">
-                  <label>IBAN</label>
-                  <div className="account-iban">{account.iban}</div>
+                  <label>RIB</label>
+                  <div className="account-iban">{account.rib}</div>
                 </div>
 
                 <div className="account-balance-box">
