@@ -60,7 +60,6 @@ const BankCard = () => {
               <div className="value">{cardData.cardHolder}</div>
             </div>
             <div className="card-expiry">
-              <div className="label">Expire fin</div>
               <div className="value">{cardData.expiryDate}</div>
             </div>
           </div>
