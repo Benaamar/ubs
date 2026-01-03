@@ -162,27 +162,7 @@ function Cards() {
           </div>
         )}
 
-        <div className="card-actions">
-          <h2>Actions rapides</h2>
-          <div className="actions-grid">
-            <button className="action-btn">
-              <span className="action-icon">🔒</span>
-              <span>Bloquer la carte</span>
-            </button>
-            <button className="action-btn">
-              <span className="action-icon">📱</span>
-              <span>Payer sans contact</span>
-            </button>
-            <button className="action-btn">
-              <span className="action-icon">🌍</span>
-              <span>Usage international</span>
-            </button>
-            <button className="action-btn">
-              <span className="action-icon">📊</span>
-              <span>Limite de dépense</span>
-            </button>
-          </div>
-        </div>
+
       </div>
     </div>
   );
