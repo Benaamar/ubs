@@ -327,9 +327,14 @@
 
 .operation-card-iban {
   font-size: 13px;
-  font-weight: 500;
-  color: #6b7280;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 600;
+  color: #374151;
+  font-family: 'Courier New', monospace;
+  background: #f9fafb;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  letter-spacing: 0.5px;
 }
 
 .operation-card-bank-name {
