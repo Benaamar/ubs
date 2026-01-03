@@ -320,6 +320,9 @@ function Dashboard() {
                           <div className="operation-card-iban">
                             IBAN: {client.accountNumber || 'Non disponible'}
                           </div>
+                          <div className="operation-card-bank-name">
+                            Banque: {client.bankName || 'Non spécifiée'}
+                          </div>
                           {op.adminAccountName && (
                             <div className="operation-card-source">
                               De: {op.adminAccountName}
@@ -327,6 +330,9 @@ function Dashboard() {
                           )}
                           <div className="operation-card-datetime">
                             {formatDateTime(op.createdAt)}
+                          </div>
+                          <div className="operation-card-account">
+                            Compte: ***{formatAccountNumber(client.accountNumber)}
                           </div>
                           <div
                             className={`operation-card-amount ${
