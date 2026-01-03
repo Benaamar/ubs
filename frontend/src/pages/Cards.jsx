@@ -16,7 +16,8 @@ const BankCard = () => {
       expiryDate: '12/25',
       cvv: '123',
       cardType: 'VISA',
-      cardTier: 'GOLD'
+      cardTier: 'GOLD',
+      rib: 'CH93 0076 2011 6238 5295 7'
     };
     setCardData(mockCardData);
   }, [user]);
@@ -73,9 +74,8 @@ const BankCard = () => {
           <div className="card-background"></div>
           <div className="magnetic-strip"></div>
           <div className="signature-panel">
-            <div className="cvv-box">
-              <span className="cvv-label">CVV</span>
-              <span className="cvv-value">{cardData.cvv}</span>
+            <div className="rib-box">
+              <span className="rib-value">{cardData.rib}</span>
             </div>
           </div>
           <div className="card-info-text">
