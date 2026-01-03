@@ -14,6 +14,7 @@ import History from './pages/History'
 import Accounts from './pages/Accounts'
 import OperationDetails from './pages/OperationDetails'
 import Cards from './pages/Cards'
+import Plus from './pages/Plus'
 import Layout from './components/Layout'
 
 function PrivateRoute({ children }) {
@@ -132,6 +133,16 @@ function AppRoutes() {
           <PrivateRoute>
             <Layout>
               <Cards />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/plus"
+        element={
+          <PrivateRoute>
+            <Layout>
+              <Plus />
             </Layout>
           </PrivateRoute>
         }
