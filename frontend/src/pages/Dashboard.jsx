@@ -420,6 +420,8 @@ function Dashboard() {
             <FiClock size={22} />
             <span>Historique</span>
           </Link>
+        </nav>
+        <div className="sidebar-logout">
           <button 
             className="sidebar-nav-item logout-btn"
             onClick={handleLogout}
@@ -427,7 +429,7 @@ function Dashboard() {
             <FiLogOut size={22} />
             <span>Déconnexion</span>
           </button>
-        </nav>
+        </div>
       </div>
     </div>
   )
