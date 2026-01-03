@@ -186,33 +186,14 @@ function History() {
     return 'visa'
   }
 
-  // Formater la date et l'heure
-  const formatDateTime = (dateString) => {
+  // Formater la date
+  const formatDate = (dateString) => {
     const date = new Date(dateString)
-    const today = new Date()
-    const yesterday = new Date(today)
-    yesterday.setDate(yesterday.getDate() - 1)
-    
-    const time = date.toLocaleTimeString('fr-FR', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    })
-    
-    // Si c'est aujourd'hui
-    if (date.toDateString() === today.toDateString()) {
-      return `Aujourd'hui à ${time}`
-    }
-    // Si c'est hier
-    if (date.toDateString() === yesterday.toDateString()) {
-      return `Hier à ${time}`
-    }
-    // Sinon afficher la date complète
-    const dateStr = date.toLocaleDateString('fr-FR', {
+    return date.toLocaleDateString('fr-FR', {
       day: '2-digit',
-      month: 'short',
-      year: 'numeric'
+      month: '2-digit',
+      year: '2-digit'
     })
-    return `${dateStr} à ${time}`
   }
 
   const { statusGroups, dateGroups } = groupOperationsByDate(operations)
@@ -440,7 +421,7 @@ function History() {
                             </div>
                           )}
                           <div className="operation-datetime">
-                            {formatDateTime(op.createdAt)}
+                            {formatDate(op.createdAt)}
                           </div>
                           {client && client.accountNumber && (
                             <div className="operation-account">
@@ -525,7 +506,7 @@ function History() {
                             </div>
                           )}
                           <div className="operation-datetime">
-                            {formatDateTime(op.createdAt)}
+                            {formatDate(op.createdAt)}
                           </div>
                           {client && client.accountNumber && (
                             <div className="operation-account">
