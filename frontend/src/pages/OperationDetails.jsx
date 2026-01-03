@@ -92,7 +92,7 @@ function OperationDetails() {
       <div className="details-header">
         <button onClick={() => navigate('/')} className="back-button">
           <FiArrowLeft size={24} />
-          <span>Retour</span>
+          <span>←</span>
         </button>
         <h1 className="details-title">Détails de l'opération</h1>
       </div>
