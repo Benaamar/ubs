@@ -72,7 +72,7 @@ const History = () => {
   return (
     <div className="history-screen">
       <header className="history-top">
-        <button className="back-btn" onClick={() => navigate(-1)}>←</button>
+        <button className="bac" onClick={() => navigate(-1)}>←</button>
         <h1>Transactions</h1>
       </header>
 
