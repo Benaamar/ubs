@@ -200,7 +200,7 @@ function Dashboard() {
 
       {/* Quick Actions */}
       <div className="quick-actions">
-        <Link to="/operations/scan" className="quick-action-item">
+        <Link to="/" className="quick-action-item">
           <div className="quick-action-icon scan-icon">
             <BiQrScan size={24} />
           </div>
@@ -212,7 +212,7 @@ function Dashboard() {
           </div>
           <span className="quick-action-label">Charger la carte</span>
         </Link>
-        <Link to="/operations/transfer" className="quick-action-item">
+        <Link to="/" className="quick-action-item">
           <div className="quick-action-icon transfer-icon">
             <FiSend size={24} />
           </div>
