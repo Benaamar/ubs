@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { FiArrowLeft } from 'react-icons/fi'
+import { FiArrowLeft, FiSearch } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import './History.css'
@@ -8,6 +8,7 @@ const History = () => {
   const navigate = useNavigate()
   const [operations, setOperations] = useState([])
   const [loading, setLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
     load()
@@ -50,6 +51,19 @@ const History = () => {
         </button>
         <h1>Transactions</h1>
       </header>
+
+      <div className="search-section">
+        <div className="search-wrapper">
+          <FiSearch className="search-icon" size={16} />
+          <input
+            type="text"
+            placeholder="Search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
+        </div>
+      </div>
 
       {loading && <p className="loading">Chargement…</p>}
 
