@@ -405,7 +405,7 @@ function Dashboard() {
             className="sidebar-nav-item logout-btn"
             onClick={handleLogout}
           >
-            <FiLogOut size={22} />
+            <FiLogOut size={18} />
             <span>Déconnexion</span>
           </button>
         </div>
