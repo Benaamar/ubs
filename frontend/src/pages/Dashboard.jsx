@@ -250,7 +250,7 @@ function Dashboard() {
     
     {/* Label 0% */}
     <text
-      x="315"
+      x="335"
       y="80"
       fontSize="12"
       fill="#999"
