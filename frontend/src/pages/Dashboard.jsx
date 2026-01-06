@@ -228,7 +228,7 @@ function Dashboard() {
   </div>
 
   <div className="portfolio-main">
-    <span className="portfolio-amount">CHF {adminBalance.toLocaleString('fr-CH', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</span>
+    <span className="portfolio-amount">CHF {adminBalance.toLocaleString('fr-CH').replace(/\B(?=(\d{3})+(?!\d))/g, "'")}</span>
     <div className="portfolio-gain">
       <span className="gain-percent">+2.04%</span>
       <span className="gain-amount">CHF 1'043</span>
