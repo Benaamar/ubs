@@ -101,7 +101,7 @@ const History = () => {
                   <div className="tx-title">{op.description || op.type}</div>
                   <div className="tx-sub">{formatDate(op.createdAt)} {op.type.toUpperCase()}</div>
                 </div>
-                <div className="tx-amount">CHF {op.type === 'withdrawal' ? '-' : ''}{formatAmount(op.amount)}</div>
+                <div className="tx-amount">CHF {op.type === 'withdrawal' ? '-' : op.type === 'deposit' ? '+' : ''}{formatAmount(op.amount)}</div>
               </div>
             ))}
           </section>
