@@ -236,22 +236,49 @@ function Dashboard() {
   </div>
 
   <div className="portfolio-chart">
-    <svg viewBox="0 0 320 120">
-      <polyline
-        points="0,80 40,90 80,60 120,65 160,45 200,55 240,50 280,40 320,30"
-        fill="none"
-        stroke="#4AA3FF"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  </div>
+  <svg viewBox="0 0 320 140" className="portfolio-svg">
+    {/* Ligne 0% */}
+    <line
+      x1="0"
+      y1="85"
+      x2="320"
+      y2="85"
+      stroke="#d0d0d0"
+      strokeDasharray="3 4"
+      strokeWidth="1"
+    />
 
-  <div className="portfolio-footer">
-    <span>31.12.2023</span>
-    <span>09.08.2024</span>
-  </div>
+    {/* Courbe */}
+    <polyline
+      points="0,90 40,95 80,65 120,70 160,45 200,60 240,55 280,45 320,35"
+      fill="none"
+      stroke="#5AA9E6"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+
+    {/* Zone bleue */}
+    <polygon
+      points="0,90 40,95 80,65 120,70 160,45 200,60 240,55 280,45 320,35 320,120 0,120"
+      fill="url(#blueGradient)"
+    />
+
+    <defs>
+      <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#5AA9E6" stopOpacity="0.35" />
+        <stop offset="100%" stopColor="#5AA9E6" stopOpacity="0.05" />
+      </linearGradient>
+    </defs>
+  </svg>
+</div>
+
+<div className="portfolio-footer">
+  <span>31.12.2023</span>
+  <span className="zero-percent">0%</span>
+  <span>09.08.2024</span>
+</div>
+
 
   <div className="custody-row">
     <span>Custody account</span>
@@ -262,22 +289,33 @@ function Dashboard() {
 
 {/* Favorites */}
 <div className="favorites-section">
-  <h3 className="favorites-title">Favorites</h3>
+  <div className="favorites-header">Favorites</div>
 
-  <div className="favorite-row">
-    <div>
-      <span className="favorite-name">Private account</span>
+  <div className="favorite-item">
+    <div className="favorite-left">
+      <span className="favorite-icon">⛃</span>
+      <div>
+        <div className="favorite-label">Private account</div>
+        <div className="favorite-amount">CHF 12'010.50</div>
+      </div>
     </div>
-    <span className="favorite-balance">CHF 12'010.50</span>
+    <span className="favorite-arrow">›</span>
   </div>
 
-  <div className="favorite-row">
-    <div>
-      <span className="favorite-name">Savings</span>
+  <div className="favorite-divider"></div>
+
+  <div className="favorite-item">
+    <div className="favorite-left">
+      <span className="favorite-icon">🐷</span>
+      <div>
+        <div className="favorite-label">Savings</div>
+        <div className="favorite-amount">EUR 7'123.50</div>
+      </div>
     </div>
-    <span className="favorite-balance">EUR 7'123.50</span>
+    <span className="favorite-arrow">›</span>
   </div>
 </div>
+
 
 
       {/* Bottom Navigation */}
