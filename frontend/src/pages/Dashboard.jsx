@@ -227,13 +227,14 @@ function Dashboard() {
     <span className="portfolio-title">TradingPortfolio</span>
   </div>
 
-  <div className="portfolio-main">
-    <span className="portfolio-amount">CHF 56'267</span>
-    <div className="portfolio-gain">
-      <span className="gain-percent">+2.04%</span>
-      <span className="gain-amount">CHF 1'043</span>
-    </div>
+  <div className="portfolio-stats">
+  <div className="stat-item">
+    <span className="stat-percentage positive">+2.04%</span>
+    <span className="stat-amount positive">CHF 1'043</span>
+    <span className="stat-zero">0%</span>
   </div>
+</div>
+
 
   <div className="portfolio-chart">
   <svg viewBox="0 0 320 140" className="portfolio-svg">
@@ -275,7 +276,7 @@ function Dashboard() {
 
 <div className="portfolio-footer">
   <span>31.12.2023</span>
-  <span className="zero-percent">0%</span>
+<span className="stat-zero">0%</span>
   <span>09.08.2024</span>
 </div>
 
@@ -306,7 +307,10 @@ function Dashboard() {
 
   <div className="favorite-item">
     <div className="favorite-left">
-      <span className="favorite-icon">🐷</span>
+      <span className="favorite-icon savings-icon">
+  <FiLayers size={18} />
+</span>
+
       <div>
         <div className="favorite-label">Savings</div>
         <div className="favorite-amount">EUR 7'123.50</div>
