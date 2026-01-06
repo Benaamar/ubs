@@ -215,10 +215,9 @@ function AddOperation() {
             >
               <option value="">Sélectionner un bénéficiaire</option>
               {clients.map((client) => {
-                console.log('Client:', client)
                 const displayName = client.firstName && client.lastName 
                   ? `${client.firstName} ${client.lastName}`
-                  : client.firstName || client.lastName || client.bankName || 'Nom non disponible'
+                  : client.firstName || client.lastName || client.accountNumber || 'Client sans nom'
                 return (
                   <option key={client._id} value={client._id}>
                     {displayName}
