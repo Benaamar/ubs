@@ -98,7 +98,12 @@ const History = () => {
             {ops.map(op => (
               <div key={op._id} className="transaction-row">
                 <div>
-                  <div className="tx-title">{op.description || op.type}</div>
+                  <div className="tx-title">
+                    {op.type === 'withdrawal' && op.clientId && typeof op.clientId === 'object' 
+                      ? `${op.clientId.firstName || ''} ${op.clientId.lastName || ''}`.trim() || op.description || op.type
+                      : op.description || op.type
+                    }
+                  </div>
                   <div className="tx-sub">{formatDate(op.createdAt)} {op.type.toUpperCase()}</div>
                 </div>
                 <div className="tx-amount">CHF {op.type === 'withdrawal' ? '-' : op.type === 'deposit' ? '+' : ''}{formatAmount(op.amount)}</div>
