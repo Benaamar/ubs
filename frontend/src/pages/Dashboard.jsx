@@ -247,6 +247,17 @@ function Dashboard() {
       strokeDasharray="3 4"
       strokeWidth="1"
     />
+    
+    {/* Label 0% */}
+    <text
+      x="310"
+      y="80"
+      fontSize="12"
+      fill="#999"
+      textAnchor="end"
+    >
+      0%
+    </text>
 
     {/* Courbe */}
     <polyline
@@ -275,7 +286,6 @@ function Dashboard() {
 
 <div className="portfolio-footer">
   <span>31.12.2023</span>
-  <span className="zero-percent">0%</span>
   <span>09.08.2024</span>
 </div>
 
