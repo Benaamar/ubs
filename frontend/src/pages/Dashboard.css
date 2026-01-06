@@ -358,6 +358,7 @@
   justify-content: space-between;
   align-items: baseline;
   margin-top: 8px;
+  margin-bottom: 16px;
 }
 
 .portfolio-amount {
