@@ -23,6 +23,13 @@
   font-size: 26px;
   background: none;
   border: none;
+  color: #007aff;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .filter-bar {
