@@ -42,7 +42,9 @@ function AddOperation() {
     try {
       const response = await api.get('/clients')
       if (response.data.success) {
-        setClients(response.data.data || [])
+        const clientsData = response.data.data || []
+        console.log('Clients loaded:', clientsData)
+        setClients(clientsData)
       }
     } catch (error) {
       console.error('Erreur lors du chargement des clients:', error)
@@ -212,11 +214,17 @@ function AddOperation() {
               required
             >
               <option value="">Sélectionner un bénéficiaire</option>
-              {clients.map((client) => (
-                <option key={client._id} value={client._id}>
-                  {client.firstName ? `${client.firstName} ` : ''}{client.lastName}
-                </option>
-              ))}
+              {clients.map((client) => {
+                console.log('Client:', client)
+                const displayName = client.firstName && client.lastName 
+                  ? `${client.firstName} ${client.lastName}`
+                  : client.firstName || client.lastName || client.bankName || 'Nom non disponible'
+                return (
+                  <option key={client._id} value={client._id}>
+                    {displayName}
+                  </option>
+                )
+              })}
             </select>
           </div>
 
