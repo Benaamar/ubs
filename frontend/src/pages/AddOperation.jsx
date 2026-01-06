@@ -236,7 +236,7 @@ function AddOperation() {
               ))}
             </select>
             <div className="selected-account-iban">
-              RIB: {adminAccounts.find(acc => acc.id === formData.adminAccountType)?.rib}
+              IBAN: {adminAccounts.find(acc => acc.id === formData.adminAccountType)?.rib}
             </div>
             {adminAccount && (
               <div className="account-info-box">
