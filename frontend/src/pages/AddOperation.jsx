@@ -197,7 +197,7 @@ function AddOperation() {
           
           <div className="form-group">
             <label htmlFor="clientId">
-              <FiUser size={16} />
+              <FiUser size={16} /> 
               Bénéficiaire <span className="required">*</span>
             </label>
             <select
@@ -218,7 +218,7 @@ function AddOperation() {
 
           <div className="form-group">
             <label htmlFor="adminAccountType">
-              <FiLayers size={16} />
+              <FiLayers size={16} /> 
               Compte source (Admin) <span className="required">*</span>
             </label>
             <select
@@ -268,7 +268,7 @@ function AddOperation() {
             />
             {formData.amount && parseFloat(formData.amount) > MAX_INSTANT_AMOUNT && formData.transferType === 'instant' && (
               <div className="warning-message">
-                <FiAlertCircle size={16} />
+                <FiAlertCircle size={16} /> 
                 <span>Le montant maximum pour un virement instantané est de {MAX_INSTANT_AMOUNT.toLocaleString('fr-CH')} CHF. Veuillez choisir "Virement en 2/3 jours" pour ce montant.</span>
               </div>
             )}
@@ -276,7 +276,7 @@ function AddOperation() {
 
           <div className="form-group">
             <label htmlFor="transferType">
-              <FiClock size={16} />
+              <FiClock size={16} /> 
               Type de virement <span className="required">*</span>
             </label>
             <div className="transfer-type-options">
@@ -290,7 +290,7 @@ function AddOperation() {
                 />
                 <div className="transfer-option-content">
                   <div className="transfer-option-header">
-                    <FiZap size={20} />
+                    <FiZap size={20} /> 
                     <span className="transfer-option-title">Virement instantané</span>
                   </div>
                   <div className="transfer-option-details">
@@ -310,7 +310,7 @@ function AddOperation() {
                 />
                 <div className="transfer-option-content">
                   <div className="transfer-option-header">
-                    <FiClock size={20} />
+                    <FiClock size={20} /> 
                     <span className="transfer-option-title">Virement en 2/3 jours</span>
                   </div>
                   <div className="transfer-option-details">
@@ -324,7 +324,7 @@ function AddOperation() {
 
           <div className="form-group">
             <label htmlFor="description">
-              <FiFileText size={16} />
+              <FiFileText size={16} /> 
               Description
             </label>
             <textarea
@@ -340,13 +340,13 @@ function AddOperation() {
 
         {/* Actions */}
         <div className="form-actions">
-          <button
+          <button 
             type="button"
-            onClick={() => navigate('/operations')}
+            onClick={handleCancel}
             className="btn btn-primary"
             disabled={loading || showConfirmation}
           >
-            <FiX size={18} />
+            <FiX size={18} /> 
             <span>Annuler</span>
           </button>
           <button 
@@ -354,7 +354,7 @@ function AddOperation() {
             className="btn btn-primary" 
             disabled={loading || showConfirmation}
           >
-            <FiSave size={18} />
+            <FiSave size={18} /> 
             <span>Continuer</span>
           </button>
         </div>
@@ -365,7 +365,7 @@ function AddOperation() {
         <div className="confirmation-modal-overlay" onClick={handleCancelConfirmation}>
           <div className="confirmation-modal" onClick={(e) => e.stopPropagation()}>
             <div className="confirmation-header">
-              <FiAlertCircle size={24} className="confirmation-icon" />
+              <FiAlertCircle size={24} className="confirmation-icon" /> 
               <h3>Confirmation du virement</h3>
             </div>
             
@@ -389,12 +389,12 @@ function AddOperation() {
                     <span className="detail-value">
                       {formData.transferType === 'instant' ? (
                         <>
-                          <FiZap size={16} />
+                          <FiZap size={16} /> 
                           <strong>Virement instantané</strong>
                         </>
                       ) : (
                         <>
-                          <FiClock size={16} />
+                          <FiClock size={16} /> 
                           <strong>Virement en 2/3 jours</strong>
                         </>
                       )}
@@ -403,7 +403,7 @@ function AddOperation() {
                   
                   {formData.transferType === 'instant' ? (
                     <div className="confirmation-note">
-                      <FiZap size={16} />
+                      <FiZap size={16} /> 
                       <div>
                         <strong>Traitement immédiat</strong>
                         <br />
@@ -412,7 +412,7 @@ function AddOperation() {
                     </div>
                   ) : (
                     <div className="confirmation-note">
-                      <FiClock size={16} />
+                      <FiClock size={16} /> 
                       <div>
                         <strong>Traitement sous 2-3 jours ouvrables</strong>
                         <br />
@@ -431,7 +431,7 @@ function AddOperation() {
                 className="btn btn-secondary"
                 disabled={loading}
               >
-                <FiX size={18} />
+                <FiX size={18} /> 
                 <span>Annuler</span>
               </button>
               <button
@@ -440,7 +440,7 @@ function AddOperation() {
                 className="btn btn-primary"
                 disabled={loading}
               >
-                <FiSave size={18} />
+                <FiSave size={18} /> 
                 <span>{loading ? 'Traitement en cours...' : 'Confirmer le virement'}</span>
               </button>
             </div>
