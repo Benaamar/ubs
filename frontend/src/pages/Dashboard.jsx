@@ -220,79 +220,65 @@ function Dashboard() {
         </Link>
       </div>
 
-      {/* Trading Portfolio */}
-      <div className="trading-portfolio">
-        <div className="portfolio-header">
-          <h3 className="portfolio-title">Trading Portfolio</h3>
-        </div>
-        <div className="portfolio-balance">
-          <span className="balance-currency">CHF</span>
-          <span className="balance-amount">56'267</span>
-        </div>
-        
-        {/* Chart Container */}
-        <div className="chart-container">
-          <svg viewBox="0 0 320 180" className="portfolio-chart">
-            {/* Grid lines */}
-            <line x1="20" y1="20" x2="20" y2="140" stroke="#e0e0e0" strokeWidth="1"/>
-            <line x1="20" y1="140" x2="300" y2="140" stroke="#e0e0e0" strokeWidth="1"/>
-            
-            {/* Chart line */}
-            <polyline
-              points="20,120 60,100 100,110 140,80 180,60 220,70 260,50 300,40"
-              fill="none"
-              stroke="#4CAF50"
-              strokeWidth="2"
-            />
-            
-            {/* Area fill */}
-            <polygon
-              points="20,120 60,100 100,110 140,80 180,60 220,70 260,50 300,40 300,140 20,140"
-              fill="url(#gradient)"
-              opacity="0.3"
-            />
-            
-            {/* Gradient definition */}
-            <defs>
-              <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#4CAF50" stopOpacity="0.6"/>
-                <stop offset="100%" stopColor="#4CAF50" stopOpacity="0.1"/>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-        
-        <div className="portfolio-stats">
-          <div className="stat-item">
-            <span className="stat-percentage positive">+2.04%</span>
-            <span className="stat-amount positive">CHF 1'043</span>
-          </div>
-        </div>
-        
-        <div className="custody-account">
-          <span className="custody-label">Custody account</span>
-          <span className="custody-amount">CHF 40'234</span>
-        </div>
-      </div>
+ {/* Trading Portfolio */}
+<div className="trading-portfolio">
+  <div className="portfolio-header">
+    <span className="portfolio-dot"></span>
+    <span className="portfolio-title">TradingPortfolio</span>
+  </div>
 
-      {/* Favorites */}
-      <div className="favorites-section">
-        <h3 className="favorites-title">Favorites</h3>
-        
-        <div className="favorite-item">
-          <div className="favorite-info">
-            <span className="favorite-name">Private account</span>
-            <span className="favorite-balance">CHF 12'010.50</span>
-          </div>
-        </div>
-        
-        <div className="favorite-item">
-          <div className="favorite-info">
-            <span className="favorite-name">Savings</span>
-            <span className="favorite-balance">EUR 7'123.50</span>
-          </div>
-        </div>
-      </div>
+  <div className="portfolio-main">
+    <span className="portfolio-amount">CHF 56'267</span>
+    <div className="portfolio-gain">
+      <span className="gain-percent">+2.04%</span>
+      <span className="gain-amount">CHF 1'043</span>
+    </div>
+  </div>
+
+  <div className="portfolio-chart">
+    <svg viewBox="0 0 320 120">
+      <polyline
+        points="0,80 40,90 80,60 120,65 160,45 200,55 240,50 280,40 320,30"
+        fill="none"
+        stroke="#4AA3FF"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  </div>
+
+  <div className="portfolio-footer">
+    <span>31.12.2023</span>
+    <span>09.08.2024</span>
+  </div>
+
+  <div className="custody-row">
+    <span>Custody account</span>
+    <span>CHF 40'234</span>
+  </div>
+</div>
+
+
+{/* Favorites */}
+<div className="favorites-section">
+  <h3 className="favorites-title">Favorites</h3>
+
+  <div className="favorite-row">
+    <div>
+      <span className="favorite-name">Private account</span>
+    </div>
+    <span className="favorite-balance">CHF 12'010.50</span>
+  </div>
+
+  <div className="favorite-row">
+    <div>
+      <span className="favorite-name">Savings</span>
+    </div>
+    <span className="favorite-balance">EUR 7'123.50</span>
+  </div>
+</div>
+
 
       {/* Bottom Navigation */}
       <div className="bottom-nav">
