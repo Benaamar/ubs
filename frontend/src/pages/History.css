@@ -21,15 +21,12 @@
 
 .back-btn {
   font-size: 26px;
-  background: none;
+  background: transparent;
   border: none;
-  color: #007aff;
+  color: #000;
   cursor: pointer;
   padding: 4px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 4px;
 }
 
 .filter-bar {
