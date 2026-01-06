@@ -164,6 +164,10 @@ function AddOperation() {
     setShowConfirmation(false)
   }
 
+  const handleCancel = () => {
+    navigate('/operations')
+  }
+
   return (
     <div className="add-operation-container">
       <div className="add-operation-header">
