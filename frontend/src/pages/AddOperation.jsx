@@ -253,7 +253,6 @@ function AddOperation() {
 
           <div className="form-group">
             <label htmlFor="amount">
-              <FiDollarSign size={16} />
               Montant (CHF) <span className="required">*</span>
             </label>
             <input
