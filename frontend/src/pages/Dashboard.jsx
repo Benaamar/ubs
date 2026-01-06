@@ -250,7 +250,9 @@ function Dashboard() {
         </div>
       </div>
 
-                              <div className="transactions-header">
+            {operations.length > 0 && (
+        <div className="recent-transactions">
+          <div className="transactions-header">
             <h3 className="transactions-title">Transactions récentes</h3>
           </div>
           <div className="operations-list">
@@ -327,11 +329,11 @@ function Dashboard() {
                       </div>
                     </div>
                   </div>
-                </div>
-              )
-            })}
+                )
+              })}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Trading Portfolio */}
       <div className="trading-portfolio">
@@ -405,13 +407,6 @@ function Dashboard() {
             <span className="favorite-balance">EUR 7'123.50</span>
           </div>
         </div>
-      </div>
-
-      {/* Decorative Background */}
-      <div className="decorative-background">
-        <div className="balloon balloon-1"></div>
-        <div className="balloon balloon-2"></div>
-        <div className="balloon balloon-3"></div>
       </div>
 
       {/* Bottom Navigation */}
