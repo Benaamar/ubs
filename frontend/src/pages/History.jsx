@@ -12,6 +12,13 @@ const TABS = {
   AVENIR: 'AVENIR'
 }
 
+const TAB_LABELS = {
+  [TABS.LAST_30_DAYS]: '30 derniers jours',
+  [TABS.LAST_20]: '20 dernières transactions',
+  [TABS.LAST_6_MONTHS]: '6 derniers mois',
+  [TABS.AVENIR]: 'À venir'
+}
+
 const History = () => {
   const navigate = useNavigate()
   const [operations, setOperations] = useState([])
@@ -26,7 +33,12 @@ const History = () => {
     try {
       setLoading(true)
       const res = await api.get('/operations')
-      if (res.data?.success) setOperations(res.data.data || [])
+      if (res.data?.success) {
+        const operationsData = res.data.data || []
+        console.log('Raw operations from API:', operationsData)
+        console.log('Operations with isScheduled:', operationsData.filter(op => op.isScheduled === true))
+        setOperations(operationsData)
+      }
     } finally {
       setLoading(false)
     }
@@ -89,19 +101,19 @@ const History = () => {
       </header>
 
       <div className="filter-bar">
-        <div className="filter-label">Filter transactions ▾</div>
+        <div className="filter-label">Filtrer les transactions ▾</div>
         <div className="filter-tabs">
-          <button className={`tab ${activeTab === TABS.LAST_30_DAYS ? 'active' : ''}`} onClick={() => setActiveTab(TABS.LAST_30_DAYS)}>Last 30 Days</button>
-          <button className={`tab ${activeTab === TABS.LAST_20 ? 'active' : ''}`} onClick={() => setActiveTab(TABS.LAST_20)}>Last 20 Transactions</button>
-          <button className={`tab ${activeTab === TABS.LAST_6_MONTHS ? 'active' : ''}`} onClick={() => setActiveTab(TABS.LAST_6_MONTHS)}>Last 6 Months</button>
-          <button className={`tab ${activeTab === TABS.AVENIR ? 'active' : ''}`} onClick={() => setActiveTab(TABS.AVENIR)}>À venir</button>
+          <button className={`tab ${activeTab === TABS.LAST_30_DAYS ? 'active' : ''}`} onClick={() => setActiveTab(TABS.LAST_30_DAYS)}>{TAB_LABELS[TABS.LAST_30_DAYS]}</button>
+          <button className={`tab ${activeTab === TABS.LAST_20 ? 'active' : ''}`} onClick={() => setActiveTab(TABS.LAST_20)}>{TAB_LABELS[TABS.LAST_20]}</button>
+          <button className={`tab ${activeTab === TABS.LAST_6_MONTHS ? 'active' : ''}`} onClick={() => setActiveTab(TABS.LAST_6_MONTHS)}>{TAB_LABELS[TABS.LAST_6_MONTHS]}</button>
+          <button className={`tab ${activeTab === TABS.AVENIR ? 'active' : ''}`} onClick={() => setActiveTab(TABS.AVENIR)}>{TAB_LABELS[TABS.AVENIR]}</button>
         </div>
         {lastDate && (
-          <div className="filter-info">Until {formatDate(lastDate)} ({filteredOperations.length} transactions)</div>
+          <div className="filter-info">Jusqu'au {formatDate(lastDate)} ({filteredOperations.length} transactions)</div>
         )}
       </div>
 
-      {loading && <div className="loading">Loading…</div>}
+      {loading && <div className="loading">Chargement…</div>}
 
       {!loading && Object.entries(groupedByYear)
         .sort((a, b) => b[0] - a[0])
