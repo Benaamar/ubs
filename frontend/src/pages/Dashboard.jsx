@@ -117,6 +117,10 @@ function Dashboard() {
 
   const activeClients = clients.filter(c => c.status === 'active').length
   const pendingOperations = operations.filter(op => op.status === 'pending').length
+  
+  // Obtenir la dernière opération récente
+  const recentOperation = operations.length > 0 ? operations[0] : null
+  const hasRecentAction = recentOperation && new Date(recentOperation.createdAt) > new Date(Date.now() - 24 * 60 * 60 * 1000) // Dernières 24h
 
   // Fonction pour formater les montants avec point pour décimales et apostrophe pour milliers
   const formatAmount = (amount) => {
@@ -149,13 +153,8 @@ function Dashboard() {
 
   // Fonction pour gérer le clic sur les notifications
   const handleNotificationClick = () => {
-    // Filtrer les opérations en attente et naviguer vers l'historique avec ce filtre
-    const pendingOps = operations.filter(op => op.status === 'pending')
-    if (pendingOps.length > 0) {
-      // Stocker les opérations en attente pour les afficher dans l'historique
-      localStorage.setItem('pendingOperations', JSON.stringify(pendingOps))
-      navigate('/history', { state: { filter: 'pending' } })
-    }
+    // Naviguer vers l'historique pour voir les actions récentes
+    navigate('/history', { state: { showRecent: true } })
   }
 
   if (loading) {
@@ -200,13 +199,13 @@ function Dashboard() {
               <FiMoreHorizontal size={24} />
             </button>
             <button 
-              className="header-icon-btn notification-btn"
+              className={`header-icon-btn notification-btn ${hasRecentAction ? 'has-recent' : ''}`}
               onClick={handleNotificationClick}
               aria-label="Notifications"
             >
               <BiMessage size={24} />
-              {pendingOperations > 0 && (
-                <span className="notification-badge">{pendingOperations}</span>
+              {hasRecentAction && (
+                <span className="notification-dot"></span>
               )}
             </button>
           </div>
