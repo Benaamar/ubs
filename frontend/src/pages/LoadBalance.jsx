@@ -7,9 +7,11 @@ import './LoadBalance.css'
 function LoadBalance() {
   const navigate = useNavigate()
   const [operationType, setOperationType] = useState('deposit')
+  const [clients, setClients] = useState([])
   const [formData, setFormData] = useState({
     amount: '',
     description: '',
+    clientId: '',
     recipientName: '',
     iban: '',
     reason: ''
@@ -17,12 +19,57 @@ function LoadBalance() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  useEffect(() => {
+    if (operationType === 'transfer') {
+      loadClients()
+    }
+  }, [operationType])
+
+  const loadClients = async () => {
+    try {
+      const response = await api.get('/clients')
+      if (response.data.success) {
+        const clientsData = response.data.data || []
+        console.log('Clients loaded:', clientsData)
+        setClients(clientsData)
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement des clients:', error)
+    }
+  }
+
   const handleChange = (e) => {
+    const { name, value } = e.target
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value
     })
     setError('')
+    
+    // Si un client est sélectionné, pré-remplir les champs du destinataire
+    if (name === 'clientId' && value) {
+      const selectedClient = clients.find(client => client._id === value)
+      if (selectedClient) {
+        setFormData(prev => ({
+          ...prev,
+          clientId: value,
+          recipientName: selectedClient.firstName && selectedClient.lastName 
+            ? `${selectedClient.firstName} ${selectedClient.lastName}`
+            : selectedClient.lastName || '',
+          iban: selectedClient.accountNumber || ''
+        }))
+      }
+    }
+    
+    // Si le champ clientId est vidé, vider aussi les champs pré-remplis
+    if (name === 'clientId' && !value) {
+      setFormData(prev => ({
+        ...prev,
+        clientId: '',
+        recipientName: '',
+        iban: ''
+      }))
+    }
   }
 
   const handleOperationTypeChange = (type) => {
@@ -32,6 +79,7 @@ function LoadBalance() {
     if (type === 'deposit') {
       setFormData({
         ...formData,
+        clientId: '',
         recipientName: '',
         iban: '',
         reason: ''
@@ -64,12 +112,12 @@ function LoadBalance() {
         }
       } else {
         // Validation spécifique au transfert
-        if (!formData.recipientName.trim()) {
-          setError('Veuillez entrer le nom du destinataire')
+        if (!formData.clientId && !formData.recipientName.trim()) {
+          setError('Veuillez sélectionner un client existant ou entrer le nom du destinataire')
           setLoading(false)
           return
         }
-        if (!formData.iban.trim()) {
+        if (!formData.clientId && !formData.iban.trim()) {
           setError('Veuillez entrer l\'IBAN du destinataire')
           setLoading(false)
           return
@@ -85,6 +133,7 @@ function LoadBalance() {
           type: 'transfer',
           amount: amount,
           description: formData.description || 'Transfert manuel',
+          ...(formData.clientId && { clientId: formData.clientId }),
           recipientName: formData.recipientName,
           iban: formData.iban,
           reason: formData.reason
@@ -203,8 +252,31 @@ function LoadBalance() {
           {operationType === 'transfer' && (
             <>
               <div className="form-group">
+                <label htmlFor="clientId">
+                  Bénéficiaire (optionnel)
+                </label>
+                <select
+                  id="clientId"
+                  name="clientId"
+                  value={formData.clientId}
+                  onChange={handleChange}
+                >
+                  <option value="">Sélectionner un client existant...</option>
+                  {clients.map(client => (
+                    <option key={client._id} value={client._id}>
+                      {client.firstName && client.lastName 
+                        ? `${client.firstName} ${client.lastName}`
+                        : client.lastName || 'Client sans nom'
+                      }
+                    </option>
+                  ))}
+                </select>
+                <span className="input-hint">Ou remplissez les champs ci-dessous pour un nouveau destinataire</span>
+              </div>
+
+              <div className="form-group">
                 <label htmlFor="recipientName">
-                  Nom du destinataire <span className="required">*</span>
+                  Nom du destinataire {!formData.clientId && <span className="required">*</span>}
                 </label>
                 <input
                   type="text"
@@ -213,13 +285,17 @@ function LoadBalance() {
                   value={formData.recipientName}
                   onChange={handleChange}
                   placeholder="Entrez le nom du destinataire"
-                  required={operationType === 'transfer'}
+                  required={!formData.clientId}
+                  disabled={!!formData.clientId}
                 />
+                {formData.clientId && (
+                  <span className="input-hint">Pré-rempli depuis le client sélectionné</span>
+                )}
               </div>
 
               <div className="form-group">
                 <label htmlFor="iban">
-                  IBAN <span className="required">*</span>
+                  IBAN {!formData.clientId && <span className="required">*</span>}
                 </label>
                 <input
                   type="text"
@@ -228,9 +304,12 @@ function LoadBalance() {
                   value={formData.iban}
                   onChange={handleChange}
                   placeholder="CHXX XXXX XXXX XXXX XXXX X"
-                  required={operationType === 'transfer'}
+                  required={!formData.clientId}
+                  disabled={!!formData.clientId}
                 />
-                <span className="input-hint">Format IBAN suisse</span>
+                {formData.clientId && (
+                  <span className="input-hint">Pré-rempli depuis le client sélectionné</span>
+                )}
               </div>
 
               <div className="form-group">
@@ -244,7 +323,7 @@ function LoadBalance() {
                   onChange={handleChange}
                   placeholder="Décrivez le motif du transfert..."
                   rows="3"
-                  required={operationType === 'transfer'}
+                  required
                 />
               </div>
             </>
