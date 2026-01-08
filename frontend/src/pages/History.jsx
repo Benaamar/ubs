@@ -53,6 +53,8 @@ const History = () => {
     }
 
     if (activeTab === TABS.AVENIR) {
+      console.log('All operations:', operations)
+      console.log('Scheduled operations:', filtered.filter(op => op.isScheduled === true))
       filtered = filtered.filter(op => op.isScheduled === true)
     }
 
@@ -71,6 +73,11 @@ const History = () => {
 
   const formatAmount = (a) => a.toLocaleString('en-GB', { minimumFractionDigits: 2 })
   const formatDate = (d) => new Date(d).toLocaleDateString('en-GB')
+
+  const handleOperationClick = (operation) => {
+    localStorage.setItem('selectedOperation', JSON.stringify(operation))
+    navigate('/operation-details')
+  }
 
   const lastDate = filteredOperations[0]?.createdAt
 
