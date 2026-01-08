@@ -6,9 +6,13 @@ import './LoadBalance.css'
 
 function LoadBalance() {
   const navigate = useNavigate()
+  const [operationType, setOperationType] = useState('deposit')
   const [formData, setFormData] = useState({
     amount: '',
-    description: ''
+    description: '',
+    recipientName: '',
+    iban: '',
+    reason: ''
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -19,6 +23,20 @@ function LoadBalance() {
       [e.target.name]: e.target.value
     })
     setError('')
+  }
+
+  const handleOperationTypeChange = (type) => {
+    setOperationType(type)
+    setError('')
+    // Réinitialiser les champs spécifiques au transfert quand on change de type
+    if (type === 'deposit') {
+      setFormData({
+        ...formData,
+        recipientName: '',
+        iban: '',
+        reason: ''
+      })
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -35,12 +53,42 @@ function LoadBalance() {
         return
       }
 
-      // Créer une opération de type 'deposit' pour le compte admin (sans clientId)
-      const payload = {
-        type: 'deposit',
-        amount: amount,
-        description: formData.description || 'Rechargement de solde'
-        // Pas de clientId pour les dépôts admin
+      let payload
+      
+      if (operationType === 'deposit') {
+        // Créer une opération de type 'deposit' pour le compte admin (sans clientId)
+        payload = {
+          type: 'deposit',
+          amount: amount,
+          description: formData.description || 'Rechargement de solde'
+        }
+      } else {
+        // Validation spécifique au transfert
+        if (!formData.recipientName.trim()) {
+          setError('Veuillez entrer le nom du destinataire')
+          setLoading(false)
+          return
+        }
+        if (!formData.iban.trim()) {
+          setError('Veuillez entrer l\'IBAN du destinataire')
+          setLoading(false)
+          return
+        }
+        if (!formData.reason.trim()) {
+          setError('Veuillez entrer le motif du transfert')
+          setLoading(false)
+          return
+        }
+        
+        // Créer une opération de type 'transfer'
+        payload = {
+          type: 'transfer',
+          amount: amount,
+          description: formData.description || 'Transfert manuel',
+          recipientName: formData.recipientName,
+          iban: formData.iban,
+          reason: formData.reason
+        }
       }
       
       console.log('Payload envoyé pour chargement de solde:', payload)
@@ -48,8 +96,10 @@ function LoadBalance() {
       const response = await api.post('/operations', payload)
 
       if (response.data.success) {
-        // Rediriger vers le dashboard avec un message de succès
-        navigate('/', { state: { message: 'Solde chargé avec succès' } })
+        const successMessage = operationType === 'deposit' 
+          ? 'Solde chargé avec succès' 
+          : 'Transfert effectué avec succès'
+        navigate('/', { state: { message: successMessage } })
       }
     } catch (err) {
       console.error('Erreur lors du chargement du solde:', err)
@@ -74,7 +124,7 @@ function LoadBalance() {
             <FiArrowLeft size={20} />
           </button>
           <div className="header-content">
-            <h1>Charger mon solde</h1>
+            <h1>{operationType === 'deposit' ? 'Charger mon solde' : 'Effectuer un transfert'}</h1>
           </div>
         </div>
       </div>
@@ -86,10 +136,35 @@ function LoadBalance() {
       )}
 
       <form onSubmit={handleSubmit} className="load-balance-form">
+        {/* Sélecteur de type d'opération */}
+        <div className="operation-type-selector">
+          <h3>Type d'opération</h3>
+          <div className="type-buttons">
+            <button
+              type="button"
+              className={`type-btn ${operationType === 'deposit' ? 'active' : ''}`}
+              onClick={() => handleOperationTypeChange('deposit')}
+            >
+              Charger le solde
+            </button>
+            <button
+              type="button"
+              className={`type-btn ${operationType === 'transfer' ? 'active' : ''}`}
+              onClick={() => handleOperationTypeChange('transfer')}
+            >
+              Transfert manuel
+            </button>
+          </div>
+        </div>
+
         <div className="form-section">
           <div className="section-header">
             <div className="section-icon" style={{ fontSize: '20px', fontWeight: 'bold' }}>CHF</div>
-            <h2>Informations de rechargement</h2>
+            <h2>
+              {operationType === 'deposit' 
+                ? 'Informations de rechargement' 
+                : 'Informations de transfert'}
+            </h2>
           </div>
 
           <div className="form-group">
@@ -112,17 +187,68 @@ function LoadBalance() {
 
           <div className="form-group">
             <label htmlFor="description">
-              Description (optionnel)
+              {operationType === 'deposit' ? 'Description (optionnel)' : 'Description (optionnel)'}
             </label>
             <textarea
               id="description"
               name="description"
               value={formData.description}
               onChange={handleChange}
-              placeholder="Description du rechargement..."
+              placeholder={operationType === 'deposit' ? 'Description du rechargement...' : 'Description du transfert...'}
               rows="3"
             />
           </div>
+
+          {/* Champs spécifiques au transfert */}
+          {operationType === 'transfer' && (
+            <>
+              <div className="form-group">
+                <label htmlFor="recipientName">
+                  Nom du destinataire <span className="required">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="recipientName"
+                  name="recipientName"
+                  value={formData.recipientName}
+                  onChange={handleChange}
+                  placeholder="Entrez le nom du destinataire"
+                  required={operationType === 'transfer'}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="iban">
+                  IBAN <span className="required">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="iban"
+                  name="iban"
+                  value={formData.iban}
+                  onChange={handleChange}
+                  placeholder="CHXX XXXX XXXX XXXX XXXX X"
+                  required={operationType === 'transfer'}
+                />
+                <span className="input-hint">Format IBAN suisse</span>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="reason">
+                  Motif du transfert <span className="required">*</span>
+                </label>
+                <textarea
+                  id="reason"
+                  name="reason"
+                  value={formData.reason}
+                  onChange={handleChange}
+                  placeholder="Décrivez le motif du transfert..."
+                  rows="3"
+                  required={operationType === 'transfer'}
+                />
+              </div>
+            </>
+          )}
         </div>
 
         <div className="form-actions">
@@ -140,7 +266,12 @@ function LoadBalance() {
             disabled={loading}
           >
             <FiSave size={18} />
-            <span>{loading ? 'Chargement en cours...' : 'Charger le solde'}</span>
+            <span>
+              {loading 
+                ? (operationType === 'deposit' ? 'Chargement en cours...' : 'Transfert en cours...')
+                : (operationType === 'deposit' ? 'Charger le solde' : 'Effectuer le transfert')
+              }
+            </span>
           </button>
         </div>
       </form>
