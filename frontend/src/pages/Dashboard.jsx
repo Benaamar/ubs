@@ -204,130 +204,122 @@ function Dashboard() {
           <div className="quick-action-icon scan-icon">
             <BiQrScan size={24} />
           </div>
-          <span className="quick-action-label">Scan & Pay</span>
+          <span className="quick-action-label">Scanner & Payer</span>
         </Link>
         <Link to="/balance/load" className="quick-action-item">
           <div className="quick-action-icon load-icon">
             <FiCreditCard size={24} />
           </div>
-          <span className="quick-action-label">Charger la carte</span>
+          <span className="quick-action-label">Recharger</span>
         </Link>
-        <Link to="/" className="quick-action-item">
-          <div className="quick-action-icon transfer-icon">
-            <FiSend size={24} />
+      </div>
+
+      {/* Trading Portfolio */}
+      <div className="trading-portfolio">
+        <div className="portfolio-header">
+          <span className="portfolio-dot"></span>
+          <span className="portfolio-title">Portefeuille de Trading</span>
+        </div>
+
+        <div className="portfolio-main">
+          <span className="portfolio-amount">CHF {adminBalance.toLocaleString('de-DE').replace(/\./g, "'")}</span>
+          <div className="portfolio-gain">
+            <span className="gain-percent">+2.04%</span>
+            <span className="gain-amount">CHF 1'043</span>
           </div>
-          <span className="quick-action-label">Transfert</span>
-        </Link>
+        </div>
+
+        <div className="portfolio-chart">
+          <svg viewBox="0 0 320 140" className="portfolio-svg">
+            {/* Ligne 0% */}
+            <line
+              x1="0"
+              y1="85"
+              x2="320"
+              y2="85"
+              stroke="#d0d0d0"
+              strokeDasharray="3 4"
+              strokeWidth="1"
+            />
+            
+            {/* Label 0% */}
+            <text
+              x="340"
+              y="80"
+              fontSize="12"
+              fill="#999"
+              textAnchor="end"
+            >
+              0%
+            </text>
+
+            {/* Courbe */}
+            <polyline
+              points="0,90 40,95 80,65 120,70 160,45 200,60 240,55 280,45 320,35"
+              fill="none"
+              stroke="#5AA9E6"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+
+            {/* Zone bleue */}
+            <polygon
+              points="0,90 40,95 80,65 120,70 160,45 200,60 240,55 280,45 320,35 320,120 0,120"
+              fill="url(#blueGradient)"
+            />
+
+            <defs>
+              <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#5AA9E6" stopOpacity="0.35" />
+                <stop offset="100%" stopColor="#5AA9E6" stopOpacity="0.05" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <div className="portfolio-footer">
+          <span>31.12.2023</span>
+          <span>09.08.2024</span>
+        </div>
+
+        <div className="custody-row">
+          <span>Compte de garde</span>
+          <span>CHF 40'234</span>
+        </div>
       </div>
 
- {/* Trading Portfolio */}
-<div className="trading-portfolio">
-  <div className="portfolio-header">
-    <span className="portfolio-dot"></span>
-    <span className="portfolio-title">TradingPortfolio</span>
-  </div>
+      {/* Favorites */}
+      <div className="favorites-section">
+        <div className="favorites-header">Favoris</div>
 
-  <div className="portfolio-main">
-    <span className="portfolio-amount">CHF {adminBalance.toLocaleString('de-DE').replace(/\./g, "'")}</span>
-    <div className="portfolio-gain">
-      <span className="gain-percent">+2.04%</span>
-      <span className="gain-amount">CHF 1'043</span>
-    </div>
-  </div>
+        <div className="favorite-item">
+          <div className="favorite-left">
+            <span className="favorite-icon">⛃</span>
+            <div>
+              <div className="favorite-label">Compte privé</div>
+              <div className="favorite-amount">CHF 12'010.50</div>
+            </div>
+          </div>
+          <span className="favorite-arrow">›</span>
+        </div>
 
-  <div className="portfolio-chart">
-  <svg viewBox="0 0 320 140" className="portfolio-svg">
-    {/* Ligne 0% */}
-    <line
-      x1="0"
-      y1="85"
-      x2="320"
-      y2="85"
-      stroke="#d0d0d0"
-      strokeDasharray="3 4"
-      strokeWidth="1"
-    />
-    
-    {/* Label 0% */}
-    <text
-      x="340"
-      y="80"
-      fontSize="12"
-      fill="#999"
-      textAnchor="end"
-    >
-      0%
-    </text>
+        <div className="favorite-divider"></div>
 
-    {/* Courbe */}
-    <polyline
-      points="0,90 40,95 80,65 120,70 160,45 200,60 240,55 280,45 320,35"
-      fill="none"
-      stroke="#5AA9E6"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
+        <div className="favorite-item">
+          <div className="favorite-left">
+            <span className="favorite-icon savings-icon">
+              <FiLayers size={18} />
+            </span>
 
-    {/* Zone bleue */}
-    <polygon
-      points="0,90 40,95 80,65 120,70 160,45 200,60 240,55 280,45 320,35 320,120 0,120"
-      fill="url(#blueGradient)"
-    />
-
-    <defs>
-      <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="#5AA9E6" stopOpacity="0.35" />
-        <stop offset="100%" stopColor="#5AA9E6" stopOpacity="0.05" />
-      </linearGradient>
-    </defs>
-  </svg>
-</div>
-
-<div className="portfolio-footer">
-  <span>31.12.2023</span>
-  <span>09.08.2024</span>
-</div>
-
-  <div className="custody-row">
-    <span>Custody account</span>
-    <span>CHF 40'234</span>
-  </div>
-</div>
-
-{/* Favorites */}
-<div className="favorites-section">
-  <div className="favorites-header">Favorites</div>
-
-  <div className="favorite-item">
-    <div className="favorite-left">
-      <span className="favorite-icon">⛃</span>
-      <div>
-        <div className="favorite-label">Private account</div>
-        <div className="favorite-amount">CHF 12'010.50</div>
+            <div>
+              <div className="favorite-label">Épargne</div>
+              <div className="favorite-amount">EUR 7'123.50</div>
+            </div>
+          </div>
+          <span className="favorite-arrow">›</span>
+        </div>
       </div>
-    </div>
-    <span className="favorite-arrow">›</span>
-  </div>
-
-  <div className="favorite-divider"></div>
-
-  <div className="favorite-item">
-    <div className="favorite-left">
-      <span className="favorite-icon savings-icon">
-  <FiLayers size={18} />
-</span>
-
-      <div>
-        <div className="favorite-label">Savings</div>
-        <div className="favorite-amount">EUR 7'123.50</div>
-      </div>
-    </div>
-    <span className="favorite-arrow">›</span>
-  </div>
-</div>
-
-
 
       {/* Bottom Navigation */}
       <div className="bottom-nav">
