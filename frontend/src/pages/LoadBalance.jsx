@@ -128,9 +128,9 @@ function LoadBalance() {
           return
         }
         
-        // Créer une opération de type 'transfer'
+        // Créer une opération de type 'deposit' même pour les transferts manuels
         payload = {
-          type: 'transfer',
+          type: 'deposit',
           amount: amount,
           description: formData.description || 'Transfert manuel',
           ...(formData.clientId && { clientId: formData.clientId }),
