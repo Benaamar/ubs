@@ -337,7 +337,7 @@ function AddOperation() {
           <div className="form-group">
             <label htmlFor="description">
               <FiFileText size={16} /> 
-              Description
+              Motifs
             </label>
             <textarea
               id="description"
@@ -345,7 +345,7 @@ function AddOperation() {
               value={formData.description}
               onChange={handleChange}
               rows="3"
-              placeholder="Description de l'opération (optionnel)"
+              placeholder="Motifs de l'opération (optionnel)"
             />
           </div>
         </div>
