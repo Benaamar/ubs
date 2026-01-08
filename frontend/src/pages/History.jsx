@@ -8,7 +8,8 @@ import api from '../services/api'
 const TABS = {
   LAST_30_DAYS: 'LAST_30_DAYS',
   LAST_20: 'LAST_20',
-  LAST_6_MONTHS: 'LAST_6_MONTHS'
+  LAST_6_MONTHS: 'LAST_6_MONTHS',
+  AVENIR: 'AVENIR'
 }
 
 const History = () => {
@@ -51,6 +52,10 @@ const History = () => {
       filtered = filtered.slice(0, 20)
     }
 
+    if (activeTab === TABS.AVENIR) {
+      filtered = filtered.filter(op => op.isScheduled === true)
+    }
+
     return filtered
   }, [operations, activeTab])
 
@@ -82,6 +87,7 @@ const History = () => {
           <button className={`tab ${activeTab === TABS.LAST_30_DAYS ? 'active' : ''}`} onClick={() => setActiveTab(TABS.LAST_30_DAYS)}>Last 30 Days</button>
           <button className={`tab ${activeTab === TABS.LAST_20 ? 'active' : ''}`} onClick={() => setActiveTab(TABS.LAST_20)}>Last 20 Transactions</button>
           <button className={`tab ${activeTab === TABS.LAST_6_MONTHS ? 'active' : ''}`} onClick={() => setActiveTab(TABS.LAST_6_MONTHS)}>Last 6 Months</button>
+          <button className={`tab ${activeTab === TABS.AVENIR ? 'active' : ''}`} onClick={() => setActiveTab(TABS.AVENIR)}>À venir</button>
         </div>
         {lastDate && (
           <div className="filter-info">Until {formatDate(lastDate)} ({filteredOperations.length} transactions)</div>
