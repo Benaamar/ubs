@@ -212,6 +212,12 @@ function Dashboard() {
           </div>
           <span className="quick-action-label">Recharger</span>
         </Link>
+          <Link to="/operations/transfer" className="quick-action-item">
+          <div className="quick-action-icon transfer-icon">
+            <FiSend size={24} />
+          </div>
+          <span className="quick-action-label">Transfert</span>
+        </Link>
       </div>
 
       {/* Trading Portfolio */}
