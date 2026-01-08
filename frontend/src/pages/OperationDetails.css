@@ -84,11 +84,11 @@
 }
 
 .amount-value.positive {
-  color: #059669;
+  color: #000000;
 }
 
 .amount-value.negative {
-  color: #dc2626;
+  color: #000000;
 }
 
 .amount-type {
