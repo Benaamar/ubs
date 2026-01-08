@@ -24,6 +24,7 @@ const History = () => {
   const [operations, setOperations] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState(TABS.LAST_20)
+  const [swipedOperationId, setSwipedOperationId] = useState(null)
 
   useEffect(() => {
     fetchOperations()
@@ -97,11 +98,88 @@ const History = () => {
   const formatDate = (d) => new Date(d).toLocaleDateString('en-GB')
 
   const handleOperationClick = (operation) => {
+    if (swipedOperationId) return // Ne pas naviguer si une opération est en mode swipe
     localStorage.setItem('selectedOperation', JSON.stringify(operation))
     navigate('/operation-details')
   }
 
+  const handleDeleteOperation = async (operationId) => {
+    try {
+      const response = await api.delete(`/operations/${operationId}`)
+      if (response.data.success) {
+        // Supprimer l'opération de la liste locale
+        setOperations(prev => prev.filter(op => op._id !== operationId))
+        setSwipedOperationId(null)
+      }
+    } catch (error) {
+      console.error('Erreur lors de la suppression:', error)
+      setSwipedOperationId(null)
+    }
+  }
+
+  const handleTouchStart = (e, operationId) => {
+    const touch = e.touches[0]
+    const startX = touch.clientX
+    
+    const handleTouchMove = (e) => {
+      const touch = e.touches[0]
+      const currentX = touch.clientX
+      const diffX = startX - currentX
+      
+      if (diffX > 50) { // Swipe vers la gauche de plus de 50px
+        setSwipedOperationId(operationId)
+        document.removeEventListener('touchmove', handleTouchMove)
+        document.removeEventListener('touchend', handleTouchEnd)
+      }
+    }
+    
+    const handleTouchEnd = () => {
+      document.removeEventListener('touchmove', handleTouchMove)
+      document.removeEventListener('touchend', handleTouchEnd)
+    }
+    
+    document.addEventListener('touchmove', handleTouchMove)
+    document.addEventListener('touchend', handleTouchEnd)
+  }
+
+  const handleMouseDown = (e, operationId) => {
+    const startX = e.clientX
+    
+    const handleMouseMove = (e) => {
+      const currentX = e.clientX
+      const diffX = startX - currentX
+      
+      if (diffX > 50) { // Swipe vers la gauche de plus de 50px
+        setSwipedOperationId(operationId)
+        document.removeEventListener('mousemove', handleMouseMove)
+        document.removeEventListener('mouseup', handleMouseUp)
+      }
+    }
+    
+    const handleMouseUp = () => {
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseUp)
+    }
+    
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mouseup', handleMouseUp)
+  }
+
   const lastDate = filteredOperations[0]?.createdAt
+
+  // Fermer le swipe lorsqu'on clique ailleurs
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.transaction-row')) {
+        setSwipedOperationId(null)
+      }
+    }
+
+    if (swipedOperationId) {
+      document.addEventListener('click', handleClickOutside)
+      return () => document.removeEventListener('click', handleClickOutside)
+    }
+  }, [swipedOperationId])
 
   return (
     <div className="history-screen">
@@ -131,20 +209,39 @@ const History = () => {
           <section key={year}>
             <div className="year-label">{year}</div>
             {ops.map(op => (
-              <div key={op._id} className="transaction-row" onClick={() => handleOperationClick(op)}>
-                <div>
-                  <div className="tx-title">
-                    {op.clientId && typeof op.clientId === 'object' 
-                      ? `${op.clientId.firstName || ''} ${op.clientId.lastName || ''}`.trim() || op.description || op.type
-                      : op.description || op.type
-                    }
+              <div 
+                key={op._id} 
+                className={`transaction-row ${swipedOperationId === op._id ? 'swiped' : ''}`}
+                onClick={() => handleOperationClick(op)}
+                onTouchStart={(e) => handleTouchStart(e, op._id)}
+                onMouseDown={(e) => handleMouseDown(e, op._id)}
+              >
+                <div className="transaction-content">
+                  <div>
+                    <div className="tx-title">
+                      {op.clientId && typeof op.clientId === 'object' 
+                        ? `${op.clientId.firstName || ''} ${op.clientId.lastName || ''}`.trim() || op.description || op.type
+                        : op.description || op.type
+                      }
+                    </div>
+                    <div className="tx-sub">{formatDate(op.createdAt)} {op.type.toUpperCase()}</div>
                   </div>
-                  <div className="tx-sub">{formatDate(op.createdAt)} {op.type.toUpperCase()}</div>
+                  <div className="tx-amount">
+                    <span>
+                      CHF {op.type === 'deposit' ? '+' : op.type === 'transfer' ? '-' : ''}{formatAmount(op.amount)}
+                    </span>
+                  </div>
                 </div>
-                <div className="tx-amount">
-                  <span>
-                    CHF {op.type === 'deposit' ? '+' : op.type === 'transfer' ? '-' : ''}{formatAmount(op.amount)}
-                  </span>
+                <div className="delete-action">
+                  <button 
+                    className="delete-btn"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleDeleteOperation(op._id)
+                    }}
+                  >
+                    Supprimer
+                  </button>
                 </div>
               </div>
             ))}
