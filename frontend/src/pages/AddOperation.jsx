@@ -143,7 +143,8 @@ function AddOperation() {
         amount: amount,
         description: formData.description || '',
         transferType: formData.transferType,
-        transferSpeed: formData.transferType === 'instant' ? 'instant' : '2-3 days'
+        transferSpeed: formData.transferType === 'instant' ? 'instant' : '2-3 days',
+        isScheduled: formData.transferType === 'delayed'
       }
 
       console.log('Payload envoyé:', payload)
