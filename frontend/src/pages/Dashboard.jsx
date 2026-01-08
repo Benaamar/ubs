@@ -67,7 +67,7 @@ function Dashboard() {
     try {
       const [clientsRes, operationsRes] = await Promise.all([
         api.get('/clients'),
-        api.get('/operations')
+        api.get('/operations?admin=true')
       ])
 
       setClients(clientsRes.data.data || [])
@@ -147,6 +147,17 @@ function Dashboard() {
     navigate('/operation-details')
   }
 
+  // Fonction pour gérer le clic sur les notifications
+  const handleNotificationClick = () => {
+    // Filtrer les opérations en attente et naviguer vers l'historique avec ce filtre
+    const pendingOps = operations.filter(op => op.status === 'pending')
+    if (pendingOps.length > 0) {
+      // Stocker les opérations en attente pour les afficher dans l'historique
+      localStorage.setItem('pendingOperations', JSON.stringify(pendingOps))
+      navigate('/history', { state: { filter: 'pending' } })
+    }
+  }
+
   if (loading) {
     return (
       <div className="dashboard-container">
@@ -188,7 +199,11 @@ function Dashboard() {
             <button className="header-icon-btn">
               <FiMoreHorizontal size={24} />
             </button>
-            <button className="header-icon-btn notification-btn">
+            <button 
+              className="header-icon-btn notification-btn"
+              onClick={handleNotificationClick}
+              aria-label="Notifications"
+            >
               <BiMessage size={24} />
               {pendingOperations > 0 && (
                 <span className="notification-badge">{pendingOperations}</span>

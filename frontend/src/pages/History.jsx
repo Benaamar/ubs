@@ -33,7 +33,7 @@ const History = () => {
   const fetchOperations = async () => {
     try {
       setLoading(true)
-      const res = await api.get('/operations')
+      const res = await api.get('/operations?admin=true')
       if (res.data?.success) {
         const operationsData = res.data.data || []
         console.log('Raw operations from API:', operationsData)
@@ -105,7 +105,7 @@ const History = () => {
 
   const handleDeleteOperation = async (operationId) => {
     try {
-      const response = await api.delete(`/operations/${operationId}`)
+      const response = await api.delete(`/operations/${operationId}?admin=true`)
       if (response.data.success) {
         // Supprimer l'opération de la liste locale
         setOperations(prev => prev.filter(op => op._id !== operationId))

@@ -9,12 +9,14 @@ const router = express.Router();
 router.use(protect);
 
 // @route   GET /api/operations
-// @desc    Get all operations for the logged-in user
+// @desc    Get all operations for the logged-in user or all operations if admin=true
 // @access  Private
 router.get('/', async (req, res) => {
   try {
-    const { clientId, type, status, startDate, endDate } = req.query;
-    let query = { userId: req.user.id };
+    const { clientId, type, status, startDate, endDate, admin } = req.query;
+    
+    // Si admin=true, charger toutes les opérations (pour le dashboard admin)
+    let query = admin === 'true' ? {} : { userId: req.user.id };
 
     if (clientId) query.clientId = clientId;
     if (type) query.type = type;
@@ -427,6 +429,43 @@ router.post('/transfer', async (req, res) => {
     });
   } catch (error) {
     console.error('Error creating transfer operation:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+});
+
+// @route   DELETE /api/operations/:id
+// @desc    Delete an operation
+// @access  Private
+router.delete('/:id', async (req, res) => {
+  try {
+    const { admin } = req.query;
+    
+    // Si admin=true, permettre de supprimer n'importe quelle opération
+    let query = { _id: req.params.id };
+    if (admin !== 'true') {
+      query.userId = req.user.id;
+    }
+    
+    const operation = await Operation.findOne(query);
+    
+    if (!operation) {
+      return res.status(404).json({
+        success: false,
+        message: 'Operation not found'
+      });
+    }
+
+    await Operation.findByIdAndDelete(req.params.id);
+
+    res.json({
+      success: true,
+      message: 'Operation deleted successfully'
+    });
+  } catch (error) {
+    console.error('Error deleting operation:', error);
     res.status(500).json({
       success: false,
       message: error.message
