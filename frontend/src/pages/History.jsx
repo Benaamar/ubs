@@ -105,7 +105,7 @@ const History = () => {
               <div key={op._id} className="transaction-row">
                 <div>
                   <div className="tx-title">
-                    {op.type === 'withdrawal' && op.clientId && typeof op.clientId === 'object' 
+                    {op.clientId && typeof op.clientId === 'object' 
                       ? `${op.clientId.firstName || ''} ${op.clientId.lastName || ''}`.trim() || op.description || op.type
                       : op.description || op.type
                     }
