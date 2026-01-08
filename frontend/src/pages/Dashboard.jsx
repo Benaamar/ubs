@@ -173,7 +173,7 @@ function Dashboard() {
                 <FiUser size={24} />
               </button>
               <div className="home-section">
-                <span className="home-label">Home</span>
+                <span className="home-label">Accueil</span>
                 {user && (
                   <span className="greeting-text">
                     Bonjour Monsieur {user.firstName && user.lastName 
@@ -325,7 +325,7 @@ function Dashboard() {
       <div className="bottom-nav">
         <Link to="/" className="nav-item active">
           <FiHome size={24} />
-          <span className="nav-label">Home</span>
+          <span className="nav-label">Accueil</span>
         </Link>
         <Link to="/operations/new" className="nav-item">
           <FiRepeat size={24} />
