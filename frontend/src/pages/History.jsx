@@ -66,8 +66,18 @@ const History = () => {
 
     if (activeTab === TABS.AVENIR) {
       console.log('All operations:', operations)
-      console.log('Scheduled operations:', filtered.filter(op => op.isScheduled === true))
-      filtered = filtered.filter(op => op.isScheduled === true)
+      console.log('Filtering scheduled operations...')
+      filtered = filtered.filter(op => {
+        const isScheduled = op.isScheduled === true || op.transferType === 'delayed' || op.status === 'pending'
+        console.log(`Operation ${op._id}:`, { 
+          isScheduled: op.isScheduled, 
+          transferType: op.transferType,
+          status: op.status,
+          willShow: isScheduled 
+        })
+        return isScheduled
+      })
+      console.log('Scheduled operations found:', filtered.length)
     }
 
     return filtered
