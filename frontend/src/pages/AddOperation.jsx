@@ -214,7 +214,7 @@ function AddOperation() {
               onChange={handleChange}
               required
             >
-              <option value="">Sélectionner un bénéficiaire</option>
+              <option value="" disabled>Sélectionner un bénéficiaire</option>
               {clients.map((client) => {
                 console.log('Client data:', client)
                 const displayName = client.firstName && client.lastName 
