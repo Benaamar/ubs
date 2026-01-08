@@ -58,6 +58,22 @@ function OperationDetails() {
     return 'visa'
   }
 
+  const translateStatus = (status) => {
+    if (!status) return 'Terminé'
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return 'En cours de traitement'
+      case 'completed':
+        return 'Terminé'
+      case 'failed':
+        return 'Échoué'
+      case 'cancelled':
+        return 'Annulé'
+      default:
+        return status
+    }
+  }
+
   if (loading) {
     return (
       <div className="operation-details-container">
@@ -159,7 +175,7 @@ function OperationDetails() {
             </div>
             <div className="info-item">
               <span className="info-label">Statut</span>
-              <span className="info-value status">{operation.status || 'Terminé'}</span>
+              <span className="info-value status">{translateStatus(operation.status)}</span>
             </div>
             {operation.adminAccountName && (
               <div className="info-item">
