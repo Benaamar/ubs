@@ -5,8 +5,8 @@ import { FiMail, FiLock, FiLogIn, FiUserPlus, FiAlertCircle } from 'react-icons/
 import './Auth.css'
 
 function Login() {
-  const [email, setEmail] = useState('demo@bank.com')
-  const [password, setPassword] = useState('demo123')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const { login } = useAuth()
@@ -55,7 +55,7 @@ function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="demo@bank.com"
+              placeholder="Entrez votre email"
               className="form-input"
             />
           </div>
@@ -70,7 +70,7 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              placeholder="••••••••"
+              placeholder="Entrez votre mot de passe"
               className="form-input"
             />
           </div>
