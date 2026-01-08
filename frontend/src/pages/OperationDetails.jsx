@@ -102,23 +102,7 @@ function OperationDetails() {
         {/* Amount Card */}
         <div className="amount-card">
           <div className="amount-icon">
-            {cardType === 'visa' ? (
-              <img 
-                src="https://img.icons8.com/color/48/visa.png" 
-                alt="Visa" 
-                width={48} 
-                height={28}
-                style={{ objectFit: 'contain' }}
-              />
-            ) : (
-              <img 
-                src="https://img.icons8.com/color/48/mastercard.png" 
-                alt="Mastercard" 
-                width={48} 
-                height={28}
-                style={{ objectFit: 'contain' }}
-              />
-            )}
+          
           </div>
           <div className="amount-info">
             <div className={`amount-value ${isIncoming ? 'positive' : 'negative'}`}>
