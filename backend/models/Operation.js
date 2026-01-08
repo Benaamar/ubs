@@ -53,6 +53,10 @@ const operationSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  isScheduled: {
+    type: Boolean,
+    default: false
+  },
   status: {
     type: String,
     enum: ['pending', 'completed', 'failed', 'cancelled'],

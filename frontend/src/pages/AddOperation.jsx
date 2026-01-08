@@ -149,7 +149,7 @@ function AddOperation() {
 
       console.log('Payload envoyé:', payload)
 
-      const response = await api.post('/operations', payload)
+      const response = await api.post('/operations/transfer', payload)
       if (response.data.success) {
         navigate('/operations')
       }

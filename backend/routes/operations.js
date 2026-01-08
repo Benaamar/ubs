@@ -349,5 +349,90 @@ router.get('/history/:clientId', async (req, res) => {
   }
 });
 
+// @route   POST /api/operations/transfer
+// @desc    Create a new transfer operation with scheduling support
+// @access  Private
+router.post('/transfer', async (req, res) => {
+  try {
+    const {
+      clientId,
+      adminAccountId,
+      adminAccountType,
+      adminAccountName,
+      adminAccountIban,
+      type,
+      amount,
+      description,
+      transferType,
+      transferSpeed,
+      isScheduled
+    } = req.body;
+
+    console.log('Creating transfer with data:', {
+      clientId,
+      adminAccountType,
+      adminAccountName,
+      type,
+      amount,
+      transferType,
+      transferSpeed,
+      isScheduled
+    });
+
+    // Validation
+    if (!clientId || !adminAccountType || !amount) {
+      return res.status(400).json({
+        success: false,
+        message: 'Veuillez fournir toutes les informations requises'
+      });
+    }
+
+    const numericAmount = parseFloat(amount);
+    if (isNaN(numericAmount) || numericAmount <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Montant invalide'
+      });
+    }
+
+    // Create operation with all fields
+    const operation = await Operation.create({
+      userId: req.user.id,
+      clientId,
+      adminAccountId,
+      adminAccountType,
+      adminAccountName,
+      adminAccountIban,
+      type: type || 'transfer',
+      amount: numericAmount,
+      description: description || '',
+      transferType: transferType || 'instant',
+      transferSpeed: transferSpeed || 'instant',
+      isScheduled: isScheduled || false,
+      status: isScheduled ? 'pending' : 'completed'
+    });
+
+    console.log('Transfer operation created:', operation._id, {
+      isScheduled: operation.isScheduled,
+      transferType: operation.transferType,
+      status: operation.status
+    });
+
+    const populatedOperation = await Operation.findById(operation._id)
+      .populate('clientId', 'firstName lastName bankName accountNumber');
+
+    res.status(201).json({
+      success: true,
+      data: populatedOperation
+    });
+  } catch (error) {
+    console.error('Error creating transfer operation:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+});
+
 module.exports = router;
 
