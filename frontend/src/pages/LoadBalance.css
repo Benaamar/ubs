@@ -88,6 +88,50 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* Operation Type Selector */
+.operation-type-selector {
+  margin-bottom: 32px;
+}
+
+.operation-type-selector h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 16px 0;
+}
+
+.type-buttons {
+  display: flex;
+  gap: 12px;
+  background: var(--color-background);
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.type-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: transparent;
+  color: var(--color-text-light);
+  font-family: inherit;
+}
+
+.type-btn:hover {
+  color: var(--color-text);
+}
+
+.type-btn.active {
+  background: var(--color-white);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
 .form-section {
   margin-bottom: 32px;
 }
@@ -251,6 +295,15 @@
 
   .header-content h1 {
     font-size: 20px;
+  }
+
+  .type-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .type-btn {
+    padding: 14px 16px;
   }
 
   .form-actions {
