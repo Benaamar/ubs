@@ -207,7 +207,7 @@ function LoadBalance() {
         </div>
 
         <div className="form-section">
-          <div className="section-header">
+          <div className="section-header" style={{ textAlign: 'center' }}>
             <div className="section-icon" style={{ fontSize: '20px', fontWeight: 'bold' }}>CHF</div>
             <h2>
               {operationType === 'deposit' 
