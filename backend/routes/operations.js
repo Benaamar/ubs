@@ -87,7 +87,7 @@ router.get('/:id', async (req, res) => {
 // @access  Private
 router.post('/', async (req, res) => {
   try {
-    const { clientId, type, amount, description, recipientAccountNumber, adminAccountId } = req.body;
+    const { clientId, type, amount, description, reason, recipientAccountNumber, adminAccountId } = req.body;
 
     console.log('Received operation data:', { clientId, type, amount, adminAccountId, fullBody: req.body }); // Debug
     console.log('Type of amount:', typeof amount, 'Value:', amount);
