@@ -88,7 +88,8 @@ function Dashboard() {
       // Calculer le solde admin à partir de toutes les opérations complétées
       let balance = 0
       allOperations.forEach(op => {
-        if (op.status === 'completed') {
+        // Ne calculer que les opérations de l'utilisateur connecté
+        if (op.userId === user?.id && op.status === 'completed') {
           if (op.type === 'deposit') {
             balance += op.amount
           } else {
