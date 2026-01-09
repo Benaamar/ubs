@@ -234,20 +234,6 @@ function LoadBalance() {
             <span className="input-hint">Montant en CHF</span>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="description">
-              {operationType === 'deposit' ? 'Description (optionnel)' : 'Description (optionnel)'}
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              placeholder={operationType === 'deposit' ? 'Description du rechargement...' : 'Description du transfert...'}
-              rows="3"
-            />
-          </div>
-
           {/* Champs spécifiques au transfert */}
           {operationType === 'transfer' && (
             <>
