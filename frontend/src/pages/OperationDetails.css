@@ -164,6 +164,15 @@
   font-weight: 600;
 }
 
+.info-item.full-width {
+  grid-column: 1 / -1; /* Prend toute la largeur de la grille */
+}
+
+.info-item.full-width .info-value {
+  white-space: pre-wrap; /* Permet les retours à la ligne */
+  word-break: break-word; /* Empêche le débordement du texte */
+}
+
 .action-buttons {
   display: flex;
   gap: 12px;

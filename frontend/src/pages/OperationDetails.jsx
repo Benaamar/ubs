@@ -179,10 +179,10 @@ function OperationDetails() {
               <span className="info-label">Statut</span>
               <span className="info-value status">{translateStatus(operation.status)}</span>
             </div>
-            {operation.reason && (
-              <div className="info-item">
+            {(operation.reason || operation.description) && (
+              <div className="info-item full-width">
                 <span className="info-label">Motif</span>
-                <span className="info-value">{operation.reason}</span>
+                <span className="info-value">{operation.reason || operation.description}</span>
               </div>
             )}
             {operation.adminAccountName && (
