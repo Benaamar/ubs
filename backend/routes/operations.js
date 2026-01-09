@@ -249,6 +249,7 @@ router.post('/', async (req, res) => {
       type,
       amount: numericAmount,
       description,
+      reason,
       recipientAccountNumber,
       status: 'completed',
       balanceAfter
