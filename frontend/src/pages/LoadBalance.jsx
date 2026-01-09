@@ -243,20 +243,6 @@ function LoadBalance() {
             <span className="input-hint">Montant en CHF</span>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="reason">
-              Motif du rechargement
-            </label>
-            <textarea
-              id="reason"
-              name="reason"
-              value={formData.reason}
-              onChange={handleChange}
-              placeholder="Décrivez le motif du rechargement..."
-              rows="3"
-            />
-          </div>
-
           {/* Champs spécifiques au transfert */}
           {operationType === 'transfer' && (
             <>
