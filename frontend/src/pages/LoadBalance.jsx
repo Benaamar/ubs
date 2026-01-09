@@ -108,7 +108,7 @@ function LoadBalance() {
         payload = {
           type: 'deposit',
           amount: amount,
-          description: formData.description || 'Rechargement de solde'
+          reason: formData.reason || 'Rechargement de solde'
         }
       } else {
         // Validation spécifique au transfert
@@ -237,10 +237,24 @@ function LoadBalance() {
               onChange={handleChange}
               placeholder="0.00"
               step="0.01"
-              min="0.01"
+              min="0"
               required
             />
             <span className="input-hint">Montant en CHF</span>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="reason">
+              Motif du rechargement
+            </label>
+            <textarea
+              id="reason"
+              name="reason"
+              value={formData.reason}
+              onChange={handleChange}
+              placeholder="Décrivez le motif du rechargement..."
+              rows="3"
+            />
           </div>
 
           {/* Champs spécifiques au transfert */}

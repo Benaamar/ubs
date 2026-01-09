@@ -13,6 +13,8 @@ function OperationDetails() {
     if (storedOperation) {
       try {
         const parsedOperation = JSON.parse(storedOperation)
+        console.log('Données de l\'opération reçues:', parsedOperation)
+        console.log('Reason:', parsedOperation.reason)
         setOperation(parsedOperation)
       } catch (error) {
         console.error('Erreur lors de la lecture des données de l\'opération:', error)
@@ -154,10 +156,6 @@ function OperationDetails() {
                 <span className="info-label">Banque</span>
                 <span className="info-value">{client.bankName || 'Non spécifiée'}</span>
               </div>
-              <div className="info-item">
-                <span className="info-label">Motif</span>
-                <span className="info-value">{operation.reason || 'Non spécifié'}</span>
-              </div>
             </div>
           </div>
         )}
@@ -181,6 +179,12 @@ function OperationDetails() {
               <span className="info-label">Statut</span>
               <span className="info-value status">{translateStatus(operation.status)}</span>
             </div>
+            {operation.reason && (
+              <div className="info-item">
+                <span className="info-label">Motif</span>
+                <span className="info-value">{operation.reason}</span>
+              </div>
+            )}
             {operation.adminAccountName && (
               <div className="info-item">
                 <span className="info-label">Source</span>
