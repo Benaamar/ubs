@@ -25,6 +25,10 @@ const operationSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  reason: {
+    type: String,
+    trim: true
+  },
   recipientAccountNumber: {
     type: String,
     trim: true
