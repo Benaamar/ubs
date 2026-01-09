@@ -207,9 +207,18 @@ function LoadBalance() {
         </div>
 
         <div className="form-section">
-          <div className="section-header" style={{ textAlign: 'center' }}>
-            <div className="section-icon" style={{ fontSize: '20px', fontWeight: 'bold' }}>CHF</div>
-            <h2>
+          <div className="section-header" style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            textAlign: 'center' 
+          }}>
+            <div className="section-icon" style={{ 
+              fontSize: '20px', 
+              fontWeight: 'bold',
+              marginBottom: '8px'
+            }}>CHF</div>
+            <h2 style={{ margin: 0 }}>
               {operationType === 'deposit' 
                 ? 'Informations de rechargement' 
                 : 'Informations de transfert'}
